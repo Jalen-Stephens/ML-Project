@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Node Wars: The Link Awakens</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    line-height: 1.75;
+    color: #1a1a1a;
+    background: #fafafa;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  h1 {
+    font-size: 2.2em;
+    margin-bottom: 4px;
+    color: #111;
+    line-height: 1.2;
+  }
+  .subtitle {
+    font-size: 1.15em;
+    color: #555;
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+  .authors {
+    font-size: 0.95em;
+    color: #777;
+    margin-bottom: 32px;
+  }
+  h2 {
+    font-size: 1.5em;
+    margin-top: 40px;
+    margin-bottom: 12px;
+    color: #222;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 1.15em;
+    margin-top: 24px;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  p { margin-bottom: 14px; }
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  .caption {
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+    margin-top: -12px;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.95em;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  th {
+    background: #f0f0f0;
+    font-weight: 600;
+    color: #333;
+  }
+  tr:hover { background: #f8f8f8; }
+  td:first-child, th:first-child { text-align: left; }
+  code {
+    font-family: 'SF Mono', 'Consolas', monospace;
+    background: #f0f0f0;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  .formula {
+    background: #f5f5f5;
+    border-left: 4px solid #4c72b0;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.95em;
+  }
+  .highlight {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 0.95em;
+  }
+  a { color: #4c72b0; }
+  ul, ol { margin: 10px 0 14px 24px; }
+  li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<h1>Node Wars: The Link Awakens</h1>
+<p class="subtitle">Auditing Stability in Drug Interaction GNNs</p>
+<p class="authors">Applied Machine Learning &mdash; Final Project</p>
+
+<h2>1. Introduction</h2>
+
+<p>Drug-drug interactions (DDIs) pose a serious clinical risk: when one drug alters the pharmacological effect of another, the result can range from diminished efficacy to life-threatening adverse reactions. Graph neural networks (GNNs) have emerged as a promising tool for predicting these interactions by learning from the topology of biomedical knowledge graphs. But a model that achieves high AUROC tells us it can discriminate interacting from non-interacting pairs&mdash;it tells us nothing about whether those predictions are <em>stable</em>.</p>
+
+<p>In this project, we ask a different question: <strong>are GNN-based drug interaction predictions robust to small perturbations in learned representations?</strong> If tiny changes in an embedding vector cause large shifts in predicted probabilities or completely reshuffle the ranked list of predicted interactions for a drug, clinicians should be cautious about trusting those predictions&mdash;regardless of test-set accuracy.</p>
+
+<div class="highlight">
+<strong>Primary Hypothesis:</strong> Drug interaction predictions produced by graph neural networks are highly sensitive to small perturbations in learned node embeddings. Models that achieve strong predictive accuracy may mask representational instability.
+</div>
+
+<p>We investigate this hypothesis by building a heterogeneous biomedical knowledge graph from four Stanford SNAP datasets, training two GNN architectures of differing complexity, and systematically measuring how their predictions change under controlled Gaussian noise and dimensional dropout applied to learned embeddings.</p>
+
+<h2>2. Background</h2>
+
+<p>Graph neural networks learn node representations by aggregating information from local neighborhoods. A standard GCN treats all edges identically, learning a single set of convolutional filters applied uniformly. In contrast, Relational GCN (RGCN) assigns separate weight matrices per relation type, enabling it to model heterogeneous interactions such as "drug targets gene" differently from "drug interacts with drug." Both architectures produce continuous embedding vectors for each node, and link prediction is performed by scoring the compatibility of embedding pairs through a dot-product decoder.</p>
+
+<p>For drug interaction prediction, the appeal of GNNs is clear: they can exploit the rich topology of biomedical knowledge graphs, where drugs connect to genes, genes to diseases, and diseases back to drugs through indirect paths. However, previous work has focused almost exclusively on predictive accuracy (AUROC, Hits@K) without asking whether the learned representations are <em>robust</em>. Two embeddings that produce identical predictions on a test set may have very different sensitivity to noise&mdash;and in a clinical setting, this difference matters.</p>
+
+<h2>3. Data &amp; Graph Construction</h2>
+
+<p>We construct a heterogeneous knowledge graph from four BioSNAP datasets maintained by Stanford's SNAP group:</p>
+
+<table>
+  <thead>
+    <tr><th>Dataset</th><th>Edges</th><th>Nodes</th><th>Relation</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>ChCh-Miner</td><td>48,514</td><td>1,514 drugs</td><td>Drug&ndash;Drug interaction</td></tr>
+    <tr><td>ChG-Miner</td><td>15,138</td><td>5,017 drugs + 2,324 genes</td><td>Drug targets Gene</td></tr>
+    <tr><td>DG-AssocMiner</td><td>21,357</td><td>519 diseases + 7,294 genes</td><td>Disease&ndash;Gene association</td></tr>
+    <tr><td>DCh-Miner</td><td>466,656</td><td>5,535 diseases + 1,662 drugs</td><td>Disease&ndash;Drug association</td></tr>
+  </tbody>
+</table>
+
+<p>After ID harmonization (filtering to the 1,514 drugs present in the DDI network and linking auxiliary edges to those drugs), the final heterogeneous graph contains three node types (Drug, Gene, Disease) and four relation types. The drug-gene targets link covers 79.6% of DDI drugs, and disease-drug associations cover 66.1%, providing substantial heterogeneous context for the RGCN to leverage.</p>
+
+<p>DDI edges were split 80/10/10 into train/validation/test sets. All auxiliary edges (drug-gene, disease-gene, disease-drug) remain in the graph during all phases. For the cold-start evaluation, 151 drugs (10%) with mid-range degree were held out entirely from DDI training.</p>
+
+<h2>4. ML Formulation</h2>
+
+<p>We frame this as a <strong>link prediction</strong> task on the drug-drug subgraph. Given the heterogeneous graph G = (V, E, R) with node types V = V<sub>drug</sub> &cup; V<sub>gene</sub> &cup; V<sub>disease</sub> and four relation types, we learn an embedding z<sub>u</sub> &isin; R<sup>64</sup> for each drug u. Since the SNAP datasets provide only graph topology without node features, each node starts with a learnable embedding vector initialized via Xavier uniform. The prediction function for a drug pair (u, v) is score(u,v) = &sigma;(z<sub>u</sub><sup>T</sup> z<sub>v</sub>), where &sigma; is the sigmoid function. We optimize binary cross-entropy loss with 1:5 positive-to-negative sampling, and evaluate with AUROC (primary metric), AUPRC, Hits@K, and our proposed Stability Score.</p>
+
+<h2>5. Models</h2>
+
+<h3>Heuristic Baseline</h3>
+<p>Common-neighbor count between drug pairs in the training DDI graph. This requires no learning and serves as a credibility floor.</p>
+
+<h3>GCN (Structure-Only)</h3>
+<p>A 2-layer Graph Convolutional Network operating on <em>only</em> the drug-drug interaction graph. It uses learnable 64-dimensional embeddings, ReLU activations, 20% dropout, and a dot-product decoder. This model sees no gene or disease context&mdash;it can only learn from DDI topology.</p>
+
+<h3>RGCN (Multi-Relational)</h3>
+<p>A 2-layer Relational GCN operating on the full heterogeneous graph with 7 relation types (including reverse edges). It uses separate learnable embeddings per node type, basis decomposition (2 bases) for parameter efficiency, and the same dot-product decoder on drug embeddings. This model can leverage drug-gene targets, disease-gene associations, and disease-drug links to enrich drug representations.</p>
+
+<h2>6. Stability Framework</h2>
+
+<p>After training each model to convergence, we freeze all weights, extract the learned drug embeddings, and apply perturbations <em>post-hoc</em>. The model and decoder are not retrained&mdash;this isolates how sensitive the embedding space is.</p>
+
+<h3>Perturbation Methods</h3>
+<ul>
+<li><strong>Gaussian noise:</strong> z' = z + &epsilon;, where &epsilon; ~ N(0, &sigma;&sup2;I). We scale &sigma; relative to the mean embedding norm (levels: 0.01 to 0.30).</li>
+<li><strong>Dimensional dropout:</strong> Randomly zero out dimensions of each embedding (rates: 0.05 to 0.50).</li>
+</ul>
+
+<h3>Stability Metrics</h3>
+<ul>
+<li><strong>Mean |&Delta;p|:</strong> Average absolute change in predicted probability across evaluated drug pairs.</li>
+<li><strong>Spearman &rho;:</strong> Mean rank correlation of per-drug interaction rankings before/after perturbation.</li>
+<li><strong>Top-K Jaccard:</strong> Mean Jaccard similarity of each drug's top-K predicted partners before/after perturbation.</li>
+</ul>
+
+<div class="formula">
+<strong>Stability Score(&sigma;)</strong> = &frac13; &times; [ (1 &minus; mean|&Delta;p|) + mean_spearman_&rho; + mean_jaccard_top20 ]<br>
+Range: [0, 1], where 1 = perfectly stable. Reported at each perturbation level.
+</div>
+
+<p>Each perturbation experiment is repeated 10 times with different random seeds to obtain stable estimates with confidence bands. Perturbation is applied to final-layer drug embeddings only (after all GNN message passing), so we measure how sensitive the decoder is to the learned representation space rather than conflating it with message-passing dynamics.</p>
+
+<h2>7. Results: Accuracy</h2>
+
+<img src="assets/fig1_accuracy.png" alt="ROC and PR curves">
+<p class="caption">Figure 1. ROC and Precision-Recall curves for all models on the test set.</p>
+
+<table>
+  <thead>
+    <tr><th>Model</th><th>AUROC</th><th>AUPRC</th><th>Hits@20</th><th>SS (&sigma;=0.05)</th><th>SS (&sigma;=0.10)</th><th>SS (&sigma;=0.20)</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Heuristic</td><td>0.887</td><td>0.554</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td><td>&ndash;</td></tr>
+    <tr><td>GCN</td><td>0.827</td><td>0.438</td><td>0.047</td><td>0.833</td><td>0.705</td><td>0.549</td></tr>
+    <tr><td>RGCN</td><td><strong>0.917</strong></td><td><strong>0.713</strong></td><td><strong>0.147</strong></td><td>0.833</td><td>0.702</td><td>0.512</td></tr>
+  </tbody>
+</table>
+<p class="caption">Table 1. Summary of predictive accuracy and stability metrics.</p>
+
+<p>The RGCN substantially outperforms the GCN (AUROC 0.917 vs 0.827), confirming that heterogeneous context from drug-gene and disease-drug links improves DDI prediction. Notably, the common-neighbor heuristic (0.887) beats the GCN, highlighting that raw structural features are strong for this dense graph, and that a structure-only GCN needs significant auxiliary context to surpass them.</p>
+
+<h2>8. Results: Stability</h2>
+
+<img src="assets/fig2_stability.png" alt="Stability Score curves">
+<p class="caption">Figure 2. Stability Score under increasing Gaussian noise. Both models degrade at similar rates, but their instability patterns differ.</p>
+
+<p>The headline finding: <strong>both models show similar Stability Score degradation under Gaussian noise</strong>, dropping from ~0.96 at &sigma;=0.01 to ~0.39&ndash;0.47 at &sigma;=0.30. Despite the RGCN's substantially higher accuracy, its embeddings are not more stable than the GCN's&mdash;if anything, they are slightly <em>less</em> stable at higher perturbation levels. This supports our primary hypothesis: accuracy gains do not automatically translate to representational robustness.</p>
+
+<img src="assets/fig3_topk.png" alt="Top-K Jaccard overlap">
+<p class="caption">Figure 3. Top-K Jaccard overlap degradation under Gaussian noise for K=10, 20, 50.</p>
+
+<p>The top-K overlap plots reveal a practical concern: at &sigma;=0.10 (moderate noise), the GCN's top-20 predicted partners change by ~61% (Jaccard ~0.39), while the RGCN changes by ~50% (Jaccard ~0.50). At higher K, the RGCN maintains slightly better overlap, suggesting its ranking is more robust in the long tail even if top-ranked predictions are equally fragile.</p>
+
+<h2>9. Results: Ablations</h2>
+
+<img src="assets/fig4_ablation.png" alt="Edge-type ablation">
+<p class="caption">Figure 4. Edge-type removal ablation showing AUROC and Stability Score for each RGCN variant.</p>
+
+<p>The edge-type ablation reveals an interesting trade-off. Removing disease-drug edges causes the largest accuracy drop (0.917 &rarr; 0.901), confirming these are the most valuable auxiliary edges. However, it also produces the <em>highest</em> stability score (0.745), suggesting that the disease-drug edges introduce information that improves predictions but makes the embedding space slightly more sensitive to perturbation. The full RGCN achieves the best accuracy but the lowest stability.</p>
+
+<img src="assets/fig5_coldstart.png" alt="Cold-start comparison">
+<p class="caption">Figure 5. Standard vs cold-start performance for both models.</p>
+
+<p>Cold-start results are stark. Both models collapse on drugs with no DDI training edges (GCN AUROC: 0.098, RGCN: 0.314). The RGCN recovers partially thanks to auxiliary drug-gene and disease-drug edges, but performance remains far below the standard setting. Despite this accuracy collapse, the stability scores in the cold-start setting (GCN: 0.737, RGCN: 0.706) are <em>comparable to or better than</em> standard stability&mdash;likely because cold-start embeddings are less sharply tuned and thus less sensitive to perturbation. This is a subtle finding: stability and accuracy can be inversely related.</p>
+
+<h2>10. Discussion &amp; Limitations</h2>
+
+<p>Our results provide evidence for the primary hypothesis: GNN models achieving strong DDI prediction accuracy can harbor significant representational instability. The RGCN, despite its clear accuracy advantage, shows similar or slightly worse stability than the structure-only GCN. This finding has practical implications: deploying a GNN for DDI prediction in a clinical decision support system requires stability auditing beyond standard test-set evaluation.</p>
+
+<p>The accuracy-stability trade-off observed in the edge-type ablation is particularly noteworthy. Adding disease-drug edges improves AUROC by 1.6 percentage points but decreases the Stability Score by 4.3 points. One interpretation is that the disease-drug edges create longer-range dependencies in the graph, allowing the model to make more informed predictions but also making the embedding space more complex and thus more sensitive to perturbation. Future work could explore regularization techniques specifically designed to constrain embedding sensitivity during training, such as Jacobian regularization or adversarial embedding perturbation during training.</p>
+
+<p><strong>Limitations:</strong> (1) Gene identifiers across datasets use different systems (UniProt vs Entrez), preventing direct gene-level bridging between drug-gene and disease-gene edges. The disease-drug link provides the primary bridge instead. (2) The cold-start evaluation uses a relatively small set of 151 drugs. (3) Stability is measured on post-hoc perturbations rather than adversarial or naturally occurring noise. (4) We evaluate only two GNN architectures; more complex models like HGT or attention-based methods may show different stability profiles.</p>
+
+<h2>11. Conclusion</h2>
+
+<p>We built a heterogeneous biomedical knowledge graph from four SNAP datasets and compared a structure-only GCN against a multi-relational RGCN for drug-drug interaction prediction. The RGCN achieves AUROC 0.917 vs the GCN's 0.827, confirming that heterogeneous context substantially improves prediction quality. However, our stability analysis reveals that both models exhibit comparable sensitivity to embedding perturbation&mdash;the RGCN's accuracy advantage does not confer representational robustness. Edge-type ablation further shows that the most accuracy-boosting edges (disease-drug) slightly decrease stability, revealing an accuracy-stability trade-off. These findings argue for stability auditing as a complement to standard accuracy evaluation in safety-critical GNN applications.</p>
+
+<h2>12. References</h2>
+<ul>
+<li>Zitnik, M., Sosic, R., Maheshwari, S., &amp; Leskovec, J. (2018). BioSNAP Datasets: Stanford Biomedical Network Dataset Collection. <a href="https://snap.stanford.edu/biodata">snap.stanford.edu/biodata</a></li>
+<li>Schlichtkrull, M., et al. (2018). Modeling Relational Data with Graph Convolutional Networks. <em>ESWC</em>.</li>
+<li>Kipf, T. N., &amp; Welling, M. (2017). Semi-Supervised Classification with Graph Convolutional Networks. <em>ICLR</em>.</li>
+</ul>
+
+</body>
+</html>

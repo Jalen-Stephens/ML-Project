@@ -1,0 +1,34 @@
+# Data (large downloaded/processed files)
+data/raw/
+data/processed/
+data/splits/
+
+# Model checkpoints
+experiments/checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+*.env
+venv/
+.venv/

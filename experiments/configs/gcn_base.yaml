@@ -1,0 +1,9 @@
+model: gcn
+embed_dim: 64
+num_layers: 2
+dropout: 0.3
+lr: 0.01
+epochs: 200
+patience: 20
+neg_ratio: 5
+seed: 42
