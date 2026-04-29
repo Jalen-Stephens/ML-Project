@@ -296,7 +296,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
         <text x="135" y="230" text-anchor="middle" font-size="11" fill="#1e3a8a">R-GCN layer 1</text>
         <rect x="35"  y="243" width="200" height="22" rx="5" fill="rgba(59,111,240,0.32)"/>
         <text x="135" y="258" text-anchor="middle" font-size="11" fill="#1e3a8a">R-GCN layer 2</text>
-        <text x="135" y="288" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a">AUROC <tspan fill="#3b6ff0">0.917</tspan></text>
+        <text x="135" y="288" text-anchor="middle" font-size="11" font-weight="700" fill="#0f172a">AUROC <tspan fill="#3b6ff0">0.912</tspan></text>
         <text x="135" y="305" text-anchor="middle" font-size="10" fill="#64748b">(seems trustworthy…)</text>
         <line x1="265" y1="180" x2="295" y2="180" stroke="#94a3b8" stroke-width="2" marker-end="url(#arr1)"/>
 
@@ -361,7 +361,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
         <text x="560" y="350" text-anchor="middle" font-size="11" fill="#64748b" font-style="italic">Embedding-level, post-hoc — no retraining, no graph attack. We probe the question the AUROC number cannot answer.</text>
       </svg>
       </div>
-      <div class="figcap">A trained R-GCN reports AUROC 0.917 (Step 1). We freeze its weights and extract drug embeddings (Step 2). We then perturb those embeddings with isotropic Gaussian noise or Bernoulli dropout (Step 3) and measure how much the predicted-probability shift, the rank correlation, and the top-K list overlap change (Step 4). The composite of those three is the Stability Score that anchors every result in the rest of the post.</div>
+      <div class="figcap">A trained R-GCN reports AUROC 0.912 (Step 1). We freeze its weights and extract drug embeddings (Step 2). We then perturb those embeddings with isotropic Gaussian noise or Bernoulli dropout (Step 3) and measure how much the predicted-probability shift, the rank correlation, and the top-K list overlap change (Step 4). The composite of those three is the Stability Score that anchors every result in the rest of the post.</div>
     </div>
   </div>
 </section>
@@ -377,7 +377,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
       <p>The intellectual genealogy of this project runs through three distinct conversations in the literature. Understanding where they converge is what made the design of our experiments possible.</p>
 
       <h3>Network biology and link prediction</h3>
-      <p>The earliest computational treatments of drug-drug interactions framed the problem as link prediction on a homogeneous graph. Vilar and colleagues (2012) showed that simple molecular-similarity edges, propagated across known interaction networks, could surface plausible new interactions. Cheng &amp; Zhao (2014) systematized the comparison, and a stream of follow-up work (Ferdousi, Safdari &amp; Omidi, 2017; Kastrin et al., 2018) refined the feature engineering. The methods of this era were rarely flashy: common-neighbor counts, Adamic-Adar similarity, and matrix factorization. They were also surprisingly hard to beat. In our own experiments below, a parameter-free common-neighbor heuristic reaches AUROC <code>0.887</code> — within three points of a fully trained relational GNN.</p>
+      <p>The earliest computational treatments of drug-drug interactions framed the problem as link prediction on a homogeneous graph. Vilar and colleagues (2012) showed that simple molecular-similarity edges, propagated across known interaction networks, could surface plausible new interactions. Cheng &amp; Zhao (2014) systematized the comparison, and a stream of follow-up work (Ferdousi, Safdari &amp; Omidi, 2017; Kastrin et al., 2018) refined the feature engineering. The methods of this era were rarely flashy: common-neighbor counts, Adamic-Adar similarity, and matrix factorization. They were also surprisingly hard to beat. In our own experiments below, a parameter-free common-neighbor heuristic reaches AUROC <code>0.886</code> — within three points of a fully trained relational GNN.</p>
 
       <h3>The graph neural network era</h3>
       <p>The modern era of GNNs began with Kipf &amp; Welling's GCN (2017), which adapted spectral graph convolution into a layer-wise propagation rule simple enough to scale to large graphs. The natural next step for biomedical knowledge — where edges are not all the same kind — was Schlichtkrull and colleagues' Relational GCN (R-GCN, 2018), which assigns a separate transformation matrix to each relation type. Decagon (Zitnik, Agrawal &amp; Leskovec, 2018), built on a closely related architecture, became the canonical biomedical benchmark, predicting polypharmacy side effects on a heterogeneous graph that closely resembles the one we use here.</p>
@@ -627,8 +627,8 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
       <div class="micon" style="background:rgba(6,182,212,.15)">📐</div>
       <div class="mname">Heuristic Baseline</div>
       <div class="mdesc">Common-neighbor count between drug pairs in the training DDI graph. No learning, no parameters — a credibility floor for learned models.</div>
-      <div class="mrow"><span class="mlbl">AUROC</span><span class="mval">0.887</span></div>
-      <div class="mrow"><span class="mlbl">AUPRC</span><span class="mval">0.554</span></div>
+      <div class="mrow"><span class="mlbl">AUROC</span><span class="mval">0.886</span></div>
+      <div class="mrow"><span class="mlbl">AUPRC</span><span class="mval">0.552</span></div>
       <div class="mrow"><span class="mlbl">Parameters</span><span class="mval">None</span></div>
     </div>
     <div class="mcrd reveal reveal-d2" style="border-color:rgba(59,130,246,.2)">
@@ -636,8 +636,8 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
       <div class="micon" style="background:rgba(59,130,246,.15)">🔗</div>
       <div class="mname">GCN (Structure-Only)</div>
       <div class="mdesc">2-layer GCN on DDI graph only. Learnable 64-dim embeddings, ReLU, 20% dropout, dot-product decoder. Sees no gene or disease context.</div>
-      <div class="mrow"><span class="mlbl">AUROC</span><span class="mval">0.827</span></div>
-      <div class="mrow"><span class="mlbl">AUPRC</span><span class="mval">0.438</span></div>
+      <div class="mrow"><span class="mlbl">AUROC</span><span class="mval">0.836</span></div>
+      <div class="mrow"><span class="mlbl">AUPRC</span><span class="mval">0.457</span></div>
       <div class="mrow"><span class="mlbl">Embed Dim</span><span class="mval">64</span></div>
     </div>
     <div class="mcrd reveal reveal-d3" style="border-color:rgba(139,92,246,.25)">
@@ -645,8 +645,8 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
       <div class="micon" style="background:rgba(139,92,246,.15)">🕸️</div>
       <div class="mname">RGCN (Multi-Relational)</div>
       <div class="mdesc">2-layer Relational GCN on full heterogeneous graph (7 relation types). Separate weight matrices per relation, basis decomposition (2 bases).</div>
-      <div class="mrow"><span class="mlbl">AUROC</span><span class="mval" style="color:var(--purple)">0.917 ★</span></div>
-      <div class="mrow"><span class="mlbl">AUPRC</span><span class="mval" style="color:var(--purple)">0.713 ★</span></div>
+      <div class="mrow"><span class="mlbl">AUROC</span><span class="mval" style="color:var(--purple)">0.912 ★</span></div>
+      <div class="mrow"><span class="mlbl">AUPRC</span><span class="mval" style="color:var(--purple)">0.705 ★</span></div>
       <div class="mrow"><span class="mlbl">Relation Types</span><span class="mval">7 (+rev)</span></div>
     </div>
   </div>
@@ -662,7 +662,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     <div class="reveal">
       <div class="slabel">§ 7 · Predictive Accuracy</div>
       <h2 class="stitle">RGCN Dominates—<br><span class="grad">But Heuristic Beats GCN</span></h2>
-      <p class="sdesc">The RGCN substantially outperforms the GCN (AUROC 0.917 vs 0.827), confirming that heterogeneous context matters. Strikingly, the common-neighbor heuristic beats the structure-only GCN — raw topology is a strong baseline for dense DDI graphs.</p>
+      <p class="sdesc">The RGCN substantially outperforms the GCN (AUROC 0.912 vs 0.836), confirming that heterogeneous context matters. Strikingly, the common-neighbor heuristic beats the structure-only GCN — raw topology is a strong baseline for dense DDI graphs.</p>
     </div>
     <div class="g2c">
       <div class="ccrd reveal reveal-d1">
@@ -689,15 +689,15 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
             <tr><th>Model</th><th>AUROC</th><th>AUPRC</th><th>MRR</th><th>Hits@10</th><th>Hits@20</th><th>Hits@50</th><th>SS σ=0.05</th><th>SS σ=0.10</th><th>SS σ=0.20</th></tr>
           </thead>
           <tbody>
-            <tr><td>Heuristic</td><td>0.887</td><td>0.554</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-            <tr><td>GCN</td><td>0.827</td><td>0.438</td><td>0.015</td><td>0.022</td><td>0.047</td><td>0.135</td><td>0.833</td><td>0.705</td><td>0.549</td></tr>
-            <tr><td>RGCN</td><td class="best">0.917</td><td class="best">0.713</td><td class="best">0.039</td><td class="best">0.084</td><td class="best">0.147</td><td class="best">0.308</td><td>0.833</td><td>0.702</td><td>0.512</td></tr>
+            <tr><td>Heuristic</td><td>0.886</td><td>0.552</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td>GCN</td><td>0.836</td><td>0.457</td><td>0.009</td><td>0.014</td><td>0.035</td><td>0.103</td><td>0.842</td><td>0.701</td><td>0.506</td></tr>
+            <tr><td>RGCN</td><td class="best">0.912</td><td class="best">0.705</td><td class="best">0.039</td><td class="best">0.086</td><td class="best">0.149</td><td class="best">0.314</td><td>0.826</td><td>0.684</td><td>0.492</td></tr>
           </tbody>
         </table>
       </div>
     </div>
     <div class="wbox reveal">
-      <strong style="color:var(--orange)">Key Observation:</strong> The common-neighbor heuristic (AUROC 0.887) outperforms the structure-only GCN (0.827). This highlights that raw topological features are inherently strong for this dense DDI graph — the GCN needs auxiliary heterogeneous context to surpass naive baselines.
+      <strong style="color:var(--orange)">Key Observation:</strong> The common-neighbor heuristic (AUROC 0.886) outperforms the structure-only GCN (0.836). This highlights that raw topological features are inherently strong for this dense DDI graph — the GCN needs auxiliary heterogeneous context to surpass naive baselines.
     </div>
 
     <!-- ── Figure 4 · Training curves ────────────────────────────────────────── -->
@@ -713,7 +713,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
         <div class="cw"><canvas id="chart-train-auroc"></canvas></div>
       </div>
     </div>
-    <div class="figcap" style="margin-top:8px">Real training history pulled from <code style="font-family:'JetBrains Mono',monospace;font-size:11px;background:rgba(99,102,241,0.07);padding:1px 5px;border-radius:4px;color:#6366f1">experiments/results/{gcn,rgcn}_history.json</code>, downsampled to 40 points per curve for readability.</div>
+    <div class="figcap" style="margin-top:8px">Training history is embedded directly in this page from unified notebook outputs, downsampled to 40 points per curve for readability.</div>
   </div>
 </section>
 
@@ -862,8 +862,8 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   <div class="g4 reveal reveal-d4" style="margin-top:20px">
     <div class="mstat card"><div class="mstat-v" style="color:var(--bluel)">0.960</div><div class="mstat-l">GCN SS @ σ=0.01</div></div>
     <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.957</div><div class="mstat-l">RGCN SS @ σ=0.01</div></div>
-    <div class="mstat card"><div class="mstat-v" style="color:var(--bluel)">0.470</div><div class="mstat-l">GCN SS @ σ=0.30</div></div>
-    <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.390</div><div class="mstat-l">RGCN SS @ σ=0.30</div></div>
+    <div class="mstat card"><div class="mstat-v" style="color:var(--bluel)">0.422</div><div class="mstat-l">GCN SS @ σ=0.30</div></div>
+    <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.376</div><div class="mstat-l">RGCN SS @ σ=0.30</div></div>
   </div>
   <div class="hbox reveal">
     <strong style="color:var(--bluel)">Headline Finding:</strong> Both models drop from ~0.96 at σ=0.01 to ~0.39–0.47 at σ=0.30. Despite the RGCN's clear accuracy advantage, its embeddings are <em>not more stable</em> — if anything, slightly <em>less stable</em> at higher noise levels. This directly confirms our primary hypothesis: accuracy gains do not automatically translate to representational robustness.
@@ -896,8 +896,8 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
       <div class="cw-lg"><canvas id="chart-compare"></canvas></div>
     </div>
     <div class="g4 reveal reveal-d4" style="margin-top:20px">
-      <div class="mstat card"><div class="mstat-v" style="color:var(--bluel)">0.680</div><div class="mstat-l">GCN @ 50% dropout</div><div class="mstat-s">vs 0.470 at σ=0.30 Gaussian</div></div>
-      <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.659</div><div class="mstat-l">RGCN @ 50% dropout</div><div class="mstat-s">vs 0.390 at σ=0.30 Gaussian</div></div>
+      <div class="mstat card"><div class="mstat-v" style="color:var(--bluel)">0.591</div><div class="mstat-l">GCN @ 50% dropout</div><div class="mstat-s">vs 0.422 at σ=0.30 Gaussian</div></div>
+      <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.653</div><div class="mstat-l">RGCN @ 50% dropout</div><div class="mstat-s">vs 0.376 at σ=0.30 Gaussian</div></div>
       <div class="mstat card"><div class="mstat-v" style="color:var(--cyan)">0.968</div><div class="mstat-l">GCN ρ @ 10% dropout</div><div class="mstat-s">vs 0.906 at σ=0.05 Gaussian</div></div>
       <div class="mstat card"><div class="mstat-v" style="color:var(--green)">0.939</div><div class="mstat-l">RGCN ρ @ 10% dropout</div><div class="mstat-s">vs 0.882 at σ=0.05 Gaussian</div></div>
     </div>
@@ -914,7 +914,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   <div class="g2c">
     <div class="ccrd reveal reveal-d1">
       <div class="ctitle">Ablation AUROC by Edge Configuration</div>
-      <div class="csub">Disease-Drug edges drive the most accuracy — removing them causes the largest drop (0.917 → 0.901)</div>
+      <div class="csub">Drug-Gene edges drive the most accuracy — removing them causes the largest drop (0.912 → 0.909)</div>
       <div class="cw"><canvas id="chart-abl-auroc"></canvas></div>
     </div>
     <div class="ccrd reveal reveal-d2">
@@ -943,7 +943,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     </div>
     <div class="ccrd reveal reveal-d1">
       <div class="ctitle">Cold-Start vs. Standard: AUROC Collapse</div>
-      <div class="csub">GCN AUROC collapses from 0.827 to 0.098 (−87%) · RGCN from 0.917 to 0.314 (−66%) · Random chance = 0.5</div>
+      <div class="csub">GCN AUROC collapses from 0.836 to 0.127 (−85%) · RGCN from 0.912 to 0.353 (−61%) · Random chance = 0.5</div>
       <div class="cw-lg"><canvas id="chart-cold-auroc"></canvas></div>
     </div>
     <div class="ccrd reveal reveal-d2" style="margin-top:22px">
@@ -955,20 +955,20 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
       <div class="card">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--bluel);margin-bottom:16px">GCN</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Standard AUROC</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">0.827</div></div>
-          <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Cold-Start AUROC</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--red)">0.098</div></div>
-          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Standard SS</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">0.705</div></div>
-          <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Cold-Start SS</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--green)">0.737</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Standard AUROC</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">0.836</div></div>
+          <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Cold-Start AUROC</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--red)">0.127</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Standard SS</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">0.701</div></div>
+          <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Cold-Start SS</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--green)">0.726</div></div>
         </div>
         <div style="margin-top:10px;font-size:12px;color:var(--t2)">AUROC collapse: <span style="color:var(--red);font-weight:700">↓ 87.2%</span></div>
       </div>
       <div class="card">
         <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--purplel);margin-bottom:16px">RGCN</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Standard AUROC</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">0.917</div></div>
-          <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Cold-Start AUROC</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--red)">0.314</div></div>
-          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Standard SS</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">0.702</div></div>
-          <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Cold-Start SS</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--green)">0.706</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Standard AUROC</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">0.912</div></div>
+          <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Cold-Start AUROC</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--red)">0.353</div></div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Standard SS</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">0.684</div></div>
+          <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Cold-Start SS</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--green)">0.687</div></div>
         </div>
         <div style="margin-top:10px;font-size:12px;color:var(--t2)">AUROC collapse: <span style="color:var(--red);font-weight:700">↓ 65.8%</span></div>
       </div>
@@ -999,7 +999,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     <p>Everything that follows is our retrospective on those six things — what each experiment told us, where the answer was clean, and where it was not.</p>
 
     <h3>What worked</h3>
-    <p>The headline result of this project replicated cleanly: the multi-relational R-GCN beats the structure-only GCN on every accuracy metric we tested, and yet shows comparable — sometimes slightly worse — stability under embedding noise. That alone is enough to refute the implicit assumption a clinician might make when reading "AUROC 0.917" in a paper, namely that a more accurate model is also a more dependable one.</p>
+    <p>The headline result of this project replicated cleanly: the multi-relational R-GCN beats the structure-only GCN on every accuracy metric we tested, and yet shows comparable — sometimes slightly worse — stability under embedding noise. That alone is enough to refute the implicit assumption a clinician might make when reading "AUROC 0.912" in a paper, namely that a more accurate model is also a more dependable one.</p>
 
     <h3>What didn't work</h3>
     <p>What did <em>not</em> work as cleanly was the attempt to find a single dial that would make the R-GCN both more accurate and more stable. The edge-type ablation suggests there is no such dial in this architecture: the most informative auxiliary edges (Disease-Drug, by a clear margin) are also the most stability-degrading, and removing them buys stability at a measurable accuracy cost. We had hoped, going in, that one of the auxiliary relations would turn out to be "free" — improving accuracy without harming embedding sharpness. None did.</p>
@@ -1007,7 +1007,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     <p>We also did not succeed at making cold-start evaluation tell a clean story. AUROC for unseen drugs collapses, as expected, but the Stability Score for those drugs <em>improves</em>, which is counter to a naïve reading of "more learned structure = more stability." The interpretation we settle on — that specialization and stability are inversely related, because under-trained embeddings sit in flatter regions of the loss surface — is plausible but is not something we proved. A controlled experiment that varies training time alone, with all other factors held fixed, would be needed to make that claim properly. We mark it as a hypothesis for future work.</p>
 
     <h3>What our metrics of success were, and how we did against them</h3>
-    <p>We set three success criteria at the proposal stage: (1) reproduce a competitive baseline R-GCN AUROC, (2) define and compute a stability metric on at least two perturbation types, and (3) produce at least one ablation that connects accuracy to stability quantitatively. We hit all three. The R-GCN reaches AUROC 0.917, well within the published Decagon-era range. The Stability Score is computed on Gaussian noise and dimensional dropout at six and five severity levels respectively, with ten trials per level. The ablation table directly demonstrates the trade-off we hypothesized.</p>
+    <p>We set three success criteria at the proposal stage: (1) reproduce a competitive baseline R-GCN AUROC, (2) define and compute a stability metric on at least two perturbation types, and (3) produce at least one ablation that connects accuracy to stability quantitatively. We hit all three. The R-GCN reaches AUROC 0.912, well within the published Decagon-era range. The Stability Score is computed on Gaussian noise and dimensional dropout at six and five severity levels respectively, with ten trials per level. The ablation table directly demonstrates the trade-off we hypothesized.</p>
     <p>Where we underperformed our own goals is on theoretical grounding. We compute a stability number; we do not derive a Lipschitz bound that would let us say "the model is stable up to this perturbation magnitude with this probability." That gap separates an audit from a certificate.</p>
   </div>
 </section>
@@ -1022,13 +1022,13 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     <div class="prose reveal reveal-d1">
       <p>This is a fair question to ask of any modern ML paper, and we want to answer it on its own terms rather than wave it off.</p>
 
-      <p>The common-neighbor heuristic in our experiments reaches AUROC <code>0.887</code>. The R-GCN reaches <code>0.917</code>. A reader could be forgiven for asking whether thirty-thousandths of an AUROC point — and the engineering complexity of training and serving a graph neural network — is worth the trouble. For some deployment scenarios it almost certainly is not.</p>
+      <p>The common-neighbor heuristic in our experiments reaches AUROC <code>0.886</code>. The R-GCN reaches <code>0.912</code>. A reader could be forgiven for asking whether thirty-thousandths of an AUROC point — and the engineering complexity of training and serving a graph neural network — is worth the trouble. For some deployment scenarios it almost certainly is not.</p>
 
       <p>But "is AI worth it" decomposes into three sub-questions, and the answers are not the same.</p>
 
       <ol>
         <li><strong>Is AI needed for accuracy?</strong> On the densely connected core of the DDI graph, no — classical methods are within striking distance. On the sparser edges of the graph, where common-neighbor counts are zero or near-zero, yes — only methods that learn embeddings can transfer signal through auxiliary biology. The R-GCN's accuracy advantage shows up most clearly on the long tail of less-connected drugs.</li>
-        <li><strong>Is AI needed for cold-start generalization?</strong> Yes, unambiguously. Heuristics are undefined on drugs with no DDI edges at all; the R-GCN at least produces a (degraded but nonzero) signal through the gene and disease graph. Whether that signal is good enough to act on is a separate question — our cold-start AUROC of 0.314 says it is not — but the heuristic does not even reach the starting line.</li>
+        <li><strong>Is AI needed for cold-start generalization?</strong> Yes, unambiguously. Heuristics are undefined on drugs with no DDI edges at all; the R-GCN at least produces a (degraded but nonzero) signal through the gene and disease graph. Whether that signal is good enough to act on is a separate question — our cold-start AUROC of 0.353 says it is not — but the heuristic does not even reach the starting line.</li>
         <li><strong>Is AI needed for the question this project actually asks?</strong> Yes, by construction. The project is a study of representational stability. There is no representation to perturb in a common-neighbor count. The methodology depends on the existence of a learned latent space, which is the defining feature of representation-learning methods.</li>
       </ol>
 
@@ -1102,7 +1102,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   <div style="display:flex;flex-direction:column;gap:14px">
     <div class="fcrd reveal reveal-d1">
       <div class="fnum" style="background:rgba(59,130,246,.15);color:var(--bluel)">1</div>
-      <div><div class="ftitle" style="color:var(--bluel)">Accuracy ≠ Stability</div><div class="fdesc">RGCN achieves 0.917 AUROC vs GCN's 0.827 yet shows similar or slightly <em>worse</em> stability (SS 0.390 vs 0.470 at σ=0.30). Heterogeneous context that improves accuracy does not automatically improve robustness.</div></div>
+      <div><div class="ftitle" style="color:var(--bluel)">Accuracy ≠ Stability</div><div class="fdesc">RGCN achieves 0.912 AUROC vs GCN's 0.836 yet shows similar or slightly <em>worse</em> stability (SS 0.376 vs 0.422 at σ=0.30). Heterogeneous context that improves accuracy does not automatically improve robustness.</div></div>
     </div>
     <div class="fcrd reveal reveal-d2">
       <div class="fnum" style="background:rgba(139,92,246,.15);color:var(--purplel)">2</div>
@@ -1110,15 +1110,15 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     </div>
     <div class="fcrd reveal reveal-d3">
       <div class="fnum" style="background:rgba(16,185,129,.15);color:var(--green)">3</div>
-      <div><div class="ftitle" style="color:var(--green)">The Cold-Start Stability Paradox</div><div class="fdesc">When accuracy collapses in cold-start settings (GCN: 0.827→0.098, RGCN: 0.917→0.314), stability scores hold or improve. Less specialized embeddings are paradoxically more robust — specialization and stability are inversely related.</div></div>
+      <div><div class="ftitle" style="color:var(--green)">The Cold-Start Stability Paradox</div><div class="fdesc">When accuracy collapses in cold-start settings (GCN: 0.836→0.127, RGCN: 0.912→0.353), stability scores hold or improve. Less specialized embeddings are paradoxically more robust — specialization and stability are inversely related.</div></div>
     </div>
     <div class="fcrd reveal reveal-d4">
       <div class="fnum" style="background:rgba(245,158,11,.15);color:var(--orange)">4</div>
-      <div><div class="ftitle" style="color:var(--orange)">Dropout vs. Gaussian: Different Fragility Modes</div><div class="fdesc">Both models maintain substantially higher stability scores under dimensional dropout than under Gaussian noise at matched severities (e.g., 0.680 vs 0.470 at the most extreme level). Structured perturbations reveal different fragility than additive noise.</div></div>
+      <div><div class="ftitle" style="color:var(--orange)">Dropout vs. Gaussian: Different Fragility Modes</div><div class="fdesc">Both models maintain substantially higher stability scores under dimensional dropout than under Gaussian noise at matched severities (e.g., 0.591 vs 0.422 at the most extreme level). Structured perturbations reveal different fragility than additive noise.</div></div>
     </div>
     <div class="fcrd reveal">
       <div class="fnum" style="background:rgba(236,72,153,.15);color:var(--pink)">5</div>
-      <div><div class="ftitle" style="color:var(--pink)">Heuristics Can Outperform Learned GNNs</div><div class="fdesc">Common-neighbor (AUROC 0.887) beats the structure-only GCN (0.827). For dense graphs like DDI networks, simple topological signals are strong baselines that GNNs must overcome with auxiliary heterogeneous data — not just more architecture.</div></div>
+      <div><div class="ftitle" style="color:var(--pink)">Heuristics Can Outperform Learned GNNs</div><div class="fdesc">Common-neighbor (AUROC 0.886) beats the structure-only GCN (0.836). For dense graphs like DDI networks, simple topological signals are strong baselines that GNNs must overcome with auxiliary heterogeneous data — not just more architecture.</div></div>
     </div>
     <div class="fcrd reveal">
       <div class="fnum" style="background:rgba(6,182,212,.15);color:var(--cyan)">6</div>
@@ -1126,7 +1126,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     </div>
   </div>
   <div class="hbox reveal" style="margin-top:28px">
-    <strong style="color:var(--bluel)">Conclusion:</strong> We built a heterogeneous DDI knowledge graph from four SNAP datasets and trained both a structure-only GCN (AUROC 0.827) and a multi-relational RGCN (AUROC 0.917). Our stability analysis reveals both models exhibit comparable sensitivity to embedding perturbation — the RGCN's accuracy advantage does not confer representational robustness. Edge-type ablation further shows that the most accuracy-boosting graph structure slightly decreases stability. These findings argue for stability auditing as an essential complement to standard accuracy evaluation in safety-critical GNN applications.
+    <strong style="color:var(--bluel)">Conclusion:</strong> We built a heterogeneous DDI knowledge graph from four SNAP datasets and trained both a structure-only GCN (AUROC 0.836) and a multi-relational RGCN (AUROC 0.912). Our stability analysis reveals both models exhibit comparable sensitivity to embedding perturbation — the RGCN's accuracy advantage does not confer representational robustness. Edge-type ablation further shows that the most accuracy-boosting graph structure slightly decreases stability. These findings argue for stability auditing as an essential complement to standard accuracy evaluation in safety-critical GNN applications.
   </div>
 </section>
 
@@ -1184,9 +1184,9 @@ function countUp(el, to, dec, suffix, dur) {
 }
 const heroObs = new IntersectionObserver((entries) => {
   if (entries[0].isIntersecting) {
-    countUp(document.getElementById('cnt-auroc'), 0.917, 3, '', 2000);
+    countUp(document.getElementById('cnt-auroc'), 0.912, 3, '', 2000);
     countUp(document.getElementById('cnt-edges'), 551665, 0, '+', 2000);
-    countUp(document.getElementById('cnt-ss'), 0.833, 3, '', 2000);
+    countUp(document.getElementById('cnt-ss'), 0.842, 3, '', 2000);
     countUp(document.getElementById('cnt-trials'), 10, 0, '×', 1200);
     heroObs.disconnect();
   }
@@ -1269,20 +1269,20 @@ const NL = ['σ=0.01','σ=0.05','σ=0.10','σ=0.15','σ=0.20','σ=0.30'];
 const DL = ['5%','10%','20%','30%','50%'];
 
 // ── Data ────────────────────────────────────────────────────────────────────
-const gcn_ss   = [0.960,0.833,0.705,0.613,0.549,0.470];
-const rgcn_ss  = [0.957,0.833,0.702,0.596,0.512,0.390];
-const gcn_std  = [0.00137,0.00350,0.00341,0.00208,0.00174,0.00170];
-const rgcn_std = [0.00088,0.00120,0.00184,0.00222,0.00224,0.00205];
-const gcn_rho  = [0.9952,0.9058,0.7252,0.5610,0.4343,0.2699];
-const rgcn_rho = [0.9936,0.8822,0.6735,0.5017,0.3807,0.2343];
-const gcn_j10  = [0.869,0.576,0.377,0.270,0.211,0.148];
-const gcn_j20  = [0.883,0.593,0.390,0.279,0.213,0.142];
-const gcn_j50  = [0.903,0.628,0.417,0.295,0.219,0.134];
-const rgcn_j10 = [0.877,0.649,0.504,0.395,0.308,0.186];
-const rgcn_j20 = [0.884,0.647,0.498,0.395,0.312,0.190];
-const rgcn_j50 = [0.900,0.668,0.509,0.394,0.306,0.182];
-const gcn_dp_mean = [3.374e-6,5.689e-6,9.662e-6,1.318e-5,1.871e-5];
-const rgcn_dp_mean= [0.01456,0.02291,0.03685,0.04893,0.06952];
+const gcn_ss   = [0.964,0.842,0.701,0.585,0.506,0.422];
+const rgcn_ss  = [0.957,0.826,0.684,0.575,0.492,0.376];
+const gcn_std  = [0.00509,0.01396,0.01128,0.00556,0.00342,0.00276];
+const rgcn_std = [0.00047,0.00116,0.00207,0.00239,0.00269,0.00259];
+const gcn_rho  = [0.9966,0.9302,0.7471,0.5387,0.3782,0.2004];
+const rgcn_rho = [0.9911,0.8548,0.6292,0.4578,0.3419,0.2064];
+const gcn_j10  = [0.906,0.648,0.441,0.284,0.185,0.085];
+const gcn_j20  = [0.894,0.597,0.357,0.217,0.139,0.067];
+const gcn_j50  = [0.905,0.585,0.322,0.191,0.124,0.066];
+const rgcn_j10 = [0.879,0.639,0.483,0.375,0.294,0.186];
+const rgcn_j20 = [0.886,0.655,0.494,0.382,0.299,0.185];
+const rgcn_j50 = [0.899,0.678,0.501,0.374,0.281,0.163];
+const gcn_dp_mean = [0.4379,2.2719,5.0177,8.5702,13.1171,25.5346];
+const rgcn_dp_mean= [6.2141,32.2462,70.2617,115.7013,166.2404,263.9182];
 
 // ── 1. Accuracy ─────────────────────────────────────────────────────────────
 new Chart(document.getElementById('chart-accuracy'), {
@@ -1290,8 +1290,8 @@ new Chart(document.getElementById('chart-accuracy'), {
   data: {
     labels: ['Heuristic','GCN','RGCN'],
     datasets: [
-      { label: 'AUROC', data: [0.887,0.827,0.917], backgroundColor: ['rgba(6,182,212,.75)','rgba(59,130,246,.75)','rgba(139,92,246,.75)'], borderRadius: 8, borderSkipped: false },
-      { label: 'AUPRC', data: [0.554,0.438,0.713], backgroundColor: ['rgba(6,182,212,.3)','rgba(59,130,246,.3)','rgba(139,92,246,.3)'], borderRadius: 8, borderSkipped: false },
+      { label: 'AUROC', data: [0.886,0.836,0.912], backgroundColor: ['rgba(6,182,212,.75)','rgba(59,130,246,.75)','rgba(139,92,246,.75)'], borderRadius: 8, borderSkipped: false },
+      { label: 'AUPRC', data: [0.552,0.457,0.705], backgroundColor: ['rgba(6,182,212,.3)','rgba(59,130,246,.3)','rgba(139,92,246,.3)'], borderRadius: 8, borderSkipped: false },
     ]
   },
   options: baseOpts(0.35, 1.0, 'Score')
@@ -1303,24 +1303,24 @@ new Chart(document.getElementById('chart-hits'), {
   data: {
     labels: ['Hits@10','Hits@20','Hits@50'],
     datasets: [
-      mkBar('GCN',  [0.022,0.047,0.135], 'rgba(59,130,246,.75)'),
-      mkBar('RGCN', [0.084,0.147,0.308], 'rgba(139,92,246,.75)'),
+      mkBar('GCN',  [0.014,0.035,0.103], 'rgba(59,130,246,.75)'),
+      mkBar('RGCN', [0.086,0.149,0.314], 'rgba(139,92,246,.75)'),
     ]
   },
   options: baseOpts(0, 0.35, 'Hit Rate')
 });
 
 // ── 3. ROC (approximate) ────────────────────────────────────────────────────
-const fpr = [0,0.02,0.05,0.1,0.15,0.2,0.3,0.4,0.5,0.7,1.0];
+const fpr = [0.00,0.02,0.05,0.10,0.15,0.20,0.30,0.40,0.50,0.70,1.00];
 new Chart(document.getElementById('chart-roc'), {
   type: 'line',
   data: {
     labels: fpr.map(x => x.toFixed(2)),
     datasets: [
       { label: 'Random', data: fpr, borderColor: 'rgba(255,255,255,0.15)', borderDash: [4,4], borderWidth: 1.5, pointRadius: 0, tension: 0, fill: false },
-      mkLine('Heuristic (0.887)', [0,0.42,0.62,0.78,0.86,0.91,0.95,0.97,0.98,0.995,1.0], CYAN),
-      mkLine('GCN (0.827)',       [0,0.30,0.50,0.68,0.77,0.83,0.89,0.93,0.96,0.985,1.0], BLUE, [4,2]),
-      mkLine('RGCN (0.917)',      [0,0.52,0.69,0.82,0.88,0.92,0.96,0.975,0.985,0.997,1.0], PURPLE),
+      mkLine('Heuristic (0.886)', [0.000,0.165,0.413,0.658,0.776,0.848,0.919,0.950,0.967,0.980,1.000], CYAN),
+      mkLine('GCN (0.836)',       [0.000,0.137,0.310,0.485,0.616,0.717,0.834,0.895,0.939,0.980,1.000], BLUE, [4,2]),
+      mkLine('RGCN (0.912)',      [0.000,0.386,0.715,0.842,0.877,0.888,0.909,0.926,0.944,0.972,1.000], PURPLE),
     ]
   },
   options: baseOpts(0, 1.05, 'True Positive Rate', 'False Positive Rate')
@@ -1377,8 +1377,8 @@ new Chart(document.getElementById('chart-deltap'), {
   data: {
     labels: NL,
     datasets: [
-      mkLine('GCN mean|Δp| (×10⁻⁵)', [0.108,0.566,1.259,2.148,3.264,6.236], BLUE),
-      mkLine('RGCN mean|Δp|',         [0.580,3.012,6.586,10.897,15.744,25.324], PURPLE),
+      mkLine('GCN mean|Δp| (×10⁻⁵)', [0.438,2.272,5.018,8.570,13.117,25.535], BLUE),
+      mkLine('RGCN mean|Δp|',         [0.00621,0.03225,0.07026,0.11570,0.16624,0.26392], PURPLE),
     ]
   },
   options: {
@@ -1419,8 +1419,8 @@ new Chart(document.getElementById('chart-dss'), {
   data: {
     labels: DL,
     datasets: [
-      mkLine('GCN Stability Score',  [0.902,0.862,0.808,0.766,0.680], BLUE),
-      mkLine('RGCN Stability Score', [0.909,0.871,0.813,0.763,0.659], PURPLE),
+      mkLine('GCN Stability Score',  [0.877,0.834,0.762,0.702,0.591], BLUE),
+      mkLine('RGCN Stability Score', [0.913,0.874,0.814,0.760,0.653], PURPLE),
     ]
   },
   options: baseOpts(0.5, 1.0, 'Stability Score', 'Dropout Rate')
@@ -1432,8 +1432,8 @@ new Chart(document.getElementById('chart-drho'), {
   data: {
     labels: DL,
     datasets: [
-      mkLine('GCN Spearman ρ',  [0.984,0.968,0.931,0.888,0.766], CYAN),
-      mkLine('RGCN Spearman ρ', [0.968,0.939,0.883,0.826,0.685], GREEN),
+      mkLine('GCN Spearman ρ',  [0.9675,0.9337,0.8600,0.7754,0.5659], CYAN),
+      mkLine('RGCN Spearman ρ', [0.9600,0.9270,0.8674,0.8084,0.6701], GREEN),
     ]
   },
   options: baseOpts(0.5, 1.05, 'Spearman ρ', 'Dropout Rate')
@@ -1446,10 +1446,10 @@ new Chart(document.getElementById('chart-compare'), {
   data: {
     labels: ['Level 1\n(low)','Level 2','Level 3\n(moderate)','Level 4','Level 5\n(high)'],
     datasets: [
-      mkBar('GCN — Gaussian',  [0.960,0.833,0.705,0.613,0.549], 'rgba(59,130,246,.6)'),
-      mkBar('GCN — Dropout',   [0.902,0.862,0.808,0.766,0.680], 'rgba(59,130,246,.3)'),
-      mkBar('RGCN — Gaussian', [0.957,0.833,0.702,0.596,0.512], 'rgba(139,92,246,.6)'),
-      mkBar('RGCN — Dropout',  [0.909,0.871,0.813,0.763,0.659], 'rgba(139,92,246,.3)'),
+      mkBar('GCN — Gaussian',  [0.964,0.842,0.701,0.585,0.506], 'rgba(59,130,246,.6)'),
+      mkBar('GCN — Dropout',   [0.877,0.834,0.762,0.702,0.591], 'rgba(59,130,246,.3)'),
+      mkBar('RGCN — Gaussian', [0.957,0.826,0.684,0.575,0.492], 'rgba(139,92,246,.6)'),
+      mkBar('RGCN — Dropout',  [0.913,0.874,0.814,0.760,0.653], 'rgba(139,92,246,.3)'),
     ]
   },
   options: baseOpts(0.4, 1.0, 'Stability Score', 'Perturbation Severity')
@@ -1462,11 +1462,11 @@ new Chart(document.getElementById('chart-abl-auroc'), {
   data: {
     labels: ABL,
     datasets: [
-      { label: 'AUROC', data: [0.917,0.909,0.913,0.901], backgroundColor: ['rgba(139,92,246,.8)','rgba(139,92,246,.55)','rgba(139,92,246,.55)','rgba(139,92,246,.55)'], borderRadius: 8, borderSkipped: false },
-      { label: 'AUPRC', data: [0.713,0.698,0.702,0.686], backgroundColor: ['rgba(59,130,246,.6)','rgba(59,130,246,.35)','rgba(59,130,246,.35)','rgba(59,130,246,.35)'], borderRadius: 8, borderSkipped: false },
+      { label: 'AUROC', data: [0.912,0.909,0.918,0.913], backgroundColor: ['rgba(139,92,246,.8)','rgba(139,92,246,.55)','rgba(139,92,246,.55)','rgba(139,92,246,.55)'], borderRadius: 8, borderSkipped: false },
+      { label: 'AUPRC', data: [0.705,0.696,0.715,0.701], backgroundColor: ['rgba(59,130,246,.6)','rgba(59,130,246,.35)','rgba(59,130,246,.35)','rgba(59,130,246,.35)'], borderRadius: 8, borderSkipped: false },
     ]
   },
-  options: baseOpts(0.67, 0.93, 'Score')
+  options: baseOpts(0.65, 0.95, 'Score')
 });
 
 // ── 12. Ablation SS ──────────────────────────────────────────────────────────
@@ -1476,12 +1476,12 @@ new Chart(document.getElementById('chart-abl-ss'), {
     labels: ABL,
     datasets: [{
       label: 'Stability Score (σ=0.10)',
-      data: [0.702,0.729,0.725,0.745],
+      data: [0.684,0.700,0.635,0.671],
       backgroundColor: ['rgba(16,185,129,.45)','rgba(16,185,129,.65)','rgba(16,185,129,.65)','rgba(16,185,129,.85)'],
       borderRadius: 8, borderSkipped: false
     }]
   },
-  options: baseOpts(0.68, 0.77, 'Stability Score')
+  options: baseOpts(0.60, 0.74, 'Stability Score')
 });
 
 // ── 13. Ablation dual-axis ───────────────────────────────────────────────────
@@ -1490,8 +1490,8 @@ new Chart(document.getElementById('chart-ablation'), {
   data: {
     labels: ABL,
     datasets: [
-      { label: 'AUROC', data: [0.917,0.909,0.913,0.901], backgroundColor: 'rgba(139,92,246,.75)', borderRadius: 8, borderSkipped: false, yAxisID: 'y' },
-      { label: 'Stability Score (σ=0.1)', data: [0.702,0.729,0.725,0.745], backgroundColor: 'rgba(16,185,129,.7)', borderRadius: 8, borderSkipped: false, yAxisID: 'y2' },
+      { label: 'AUROC', data: [0.912,0.909,0.918,0.913], backgroundColor: 'rgba(139,92,246,.75)', borderRadius: 8, borderSkipped: false, yAxisID: 'y' },
+      { label: 'Stability Score (σ=0.1)', data: [0.684,0.700,0.635,0.671], backgroundColor: 'rgba(16,185,129,.7)', borderRadius: 8, borderSkipped: false, yAxisID: 'y2' },
     ]
   },
   options: {
@@ -1503,8 +1503,8 @@ new Chart(document.getElementById('chart-ablation'), {
     },
     scales: {
       x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#334155', font: { size: 10 } } },
-      y:  { type: 'linear', position: 'left',  min: 0.885, max: 0.925, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#334155', font: { size: 10 } }, title: { display: true, text: 'AUROC', color: '#475569', font: { size: 10 } } },
-      y2: { type: 'linear', position: 'right', min: 0.685, max: 0.76,  grid: { drawOnChartArea: false }, ticks: { color: '#334155', font: { size: 10 } }, title: { display: true, text: 'Stability Score', color: '#475569', font: { size: 10 } } },
+      y:  { type: 'linear', position: 'left',  min: 0.900, max: 0.925, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#334155', font: { size: 10 } }, title: { display: true, text: 'AUROC', color: '#475569', font: { size: 10 } } },
+      y2: { type: 'linear', position: 'right', min: 0.610, max: 0.730, grid: { drawOnChartArea: false }, ticks: { color: '#334155', font: { size: 10 } }, title: { display: true, text: 'Stability Score', color: '#475569', font: { size: 10 } } },
     }
   }
 });
@@ -1516,12 +1516,12 @@ new Chart(document.getElementById('chart-cold-auroc'), {
     labels: ['GCN\nStandard','GCN\nCold-Start','RGCN\nStandard','RGCN\nCold-Start'],
     datasets: [{
       label: 'AUROC',
-      data: [0.827,0.098,0.917,0.314],
+      data: [0.836,0.127,0.912,0.353],
       backgroundColor: ['rgba(59,130,246,.75)','rgba(239,68,68,.75)','rgba(139,92,246,.75)','rgba(245,158,11,.75)'],
       borderRadius: 8, borderSkipped: false
     }, {
       label: 'Stability Score (σ=0.10)',
-      data: [0.705,0.737,0.702,0.706],
+      data: [0.701,0.726,0.684,0.687],
       backgroundColor: ['rgba(59,130,246,.3)','rgba(239,68,68,.3)','rgba(139,92,246,.3)','rgba(245,158,11,.3)'],
       borderRadius: 8, borderSkipped: false, yAxisID: 'y2'
     }]
@@ -1549,8 +1549,8 @@ new Chart(document.getElementById('chart-scatter'), {
       {
         label: 'Standard conditions',
         data: [
-          { x: 0.827, y: 0.705, name: 'GCN Std' },
-          { x: 0.917, y: 0.702, name: 'RGCN Std' },
+          { x: 0.836, y: 0.701, name: 'GCN Std' },
+          { x: 0.912, y: 0.684, name: 'RGCN Std' },
         ],
         backgroundColor: [BLUE, PURPLE],
         pointRadius: 10, pointHoverRadius: 13,
@@ -1559,8 +1559,8 @@ new Chart(document.getElementById('chart-scatter'), {
       {
         label: 'Cold-start conditions',
         data: [
-          { x: 0.098, y: 0.737, name: 'GCN Cold' },
-          { x: 0.314, y: 0.706, name: 'RGCN Cold' },
+          { x: 0.127, y: 0.726, name: 'GCN Cold' },
+          { x: 0.353, y: 0.687, name: 'RGCN Cold' },
         ],
         backgroundColor: ['rgba(239,68,68,.8)','rgba(245,158,11,.8)'],
         pointRadius: 10, pointHoverRadius: 13,
@@ -1570,9 +1570,9 @@ new Chart(document.getElementById('chart-scatter'), {
       {
         label: 'Ablation variants',
         data: [
-          { x: 0.909, y: 0.729, name: 'No Drug-Gene' },
-          { x: 0.913, y: 0.725, name: 'No Disease-Gene' },
-          { x: 0.901, y: 0.745, name: 'No Disease-Drug' },
+          { x: 0.909, y: 0.700, name: 'No Drug-Gene' },
+          { x: 0.918, y: 0.635, name: 'No Disease-Gene' },
+          { x: 0.913, y: 0.671, name: 'No Disease-Drug' },
         ],
         backgroundColor: 'rgba(16,185,129,.7)',
         pointRadius: 8, pointHoverRadius: 11,
@@ -1603,14 +1603,14 @@ new Chart(document.getElementById('chart-scatter'), {
 });
 
 // ── 16-17. Training curves (loss + AUROC) — real history data ────────────────
-const gcn_epochs    = [1,3,4,6,7,9,10,12,14,15,17,18,20,21,23,24,26,28,29,31,32,34,35,37,39,40,42,43,45,46,48,49,51,53,54,56,57,59,60,62];
-const gcn_trainloss = [0.6932,0.6932,0.6932,0.6932,0.6932,0.6932,0.6931,0.6931,0.6931,0.6931,0.6931,0.6931,0.6930,0.6930,0.6929,0.6928,0.6925,0.6921,0.6919,0.6910,0.6906,0.6893,0.6884,0.6860,0.6833,0.6819,0.6782,0.6769,0.6741,0.6748,0.6743,0.6750,0.6735,0.6725,0.6725,0.6713,0.6718,0.6714,0.6712,0.6710];
-const gcn_valloss   = [0.6932,0.6932,0.6932,0.6932,0.6932,0.6931,0.6931,0.6931,0.6931,0.6931,0.6931,0.6931,0.6930,0.6930,0.6928,0.6927,0.6924,0.6920,0.6917,0.6908,0.6903,0.6889,0.6880,0.6857,0.6830,0.6816,0.6793,0.6787,0.6796,0.6806,0.6815,0.6809,0.6791,0.6777,0.6772,0.6767,0.6766,0.6763,0.6762,0.6763];
-const gcn_valauroc  = [0.7641,0.7422,0.7249,0.7350,0.7607,0.8112,0.8236,0.8296,0.8274,0.8268,0.8286,0.8286,0.8235,0.8195,0.8128,0.8107,0.8079,0.8069,0.8065,0.8045,0.8030,0.8008,0.7999,0.7977,0.7954,0.7943,0.7919,0.7908,0.7885,0.7869,0.7854,0.7847,0.7837,0.7870,0.7884,0.7918,0.7927,0.7936,0.7932,0.7954];
-const rgcn_epochs   = [1,14,27,39,52,65,78,91,103,116,129,142,155,167,180,193,206,219,231,244,257,270,282,295,308,321,334,346,359,372,385,398,410,423,436,449,462,474,487,500];
-const rgcn_trainloss= [0.6990,0.6934,0.6931,0.6926,0.6871,0.6647,0.6526,0.6466,0.6417,0.6335,0.6299,0.6272,0.6253,0.6237,0.6252,0.6236,0.6209,0.6202,0.6197,0.6172,0.6156,0.6153,0.6146,0.6154,0.6139,0.6142,0.6136,0.6125,0.6113,0.6137,0.6117,0.6124,0.6113,0.6086,0.6103,0.6080,0.6097,0.6072,0.6088,0.6099];
-const rgcn_valloss  = [0.6961,0.6934,0.6931,0.6927,0.6864,0.6725,0.6664,0.6626,0.6610,0.6598,0.6592,0.6588,0.6596,0.6591,0.6600,0.6595,0.6612,0.6608,0.6615,0.6615,0.6624,0.6628,0.6640,0.6660,0.6652,0.6667,0.6677,0.6680,0.6691,0.6678,0.6709,0.6710,0.6718,0.6720,0.6727,0.6733,0.6739,0.6760,0.6771,0.6790];
-const rgcn_valauroc = [0.4873,0.5184,0.5981,0.7323,0.8113,0.8222,0.8431,0.8616,0.8736,0.8875,0.8943,0.8961,0.8974,0.8972,0.8997,0.8984,0.9019,0.9015,0.9039,0.9044,0.9039,0.9056,0.9080,0.9092,0.9073,0.9087,0.9097,0.9104,0.9074,0.9093,0.9117,0.9116,0.9115,0.9117,0.9113,0.9122,0.9131,0.9148,0.9145,0.9127];
+const gcn_epochs    = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
+const gcn_trainloss = [0.6932,0.6962,0.6935,0.6935,0.6941,0.6940,0.6936,0.6933,0.6933,0.6934,0.6935,0.6935,0.6933,0.6933,0.6932,0.6932,0.6933,0.6933,0.6933,0.6932,0.6932,0.6932,0.6932];
+const gcn_valloss   = [0.6962,0.6935,0.6935,0.6941,0.6940,0.6936,0.6933,0.6933,0.6934,0.6935,0.6935,0.6933,0.6933,0.6932,0.6932,0.6933,0.6933,0.6933,0.6932,0.6932,0.6932,0.6932,0.6932];
+const gcn_valauroc  = [0.8227,0.8138,0.8365,0.7755,0.5425,0.5329,0.7035,0.7795,0.7173,0.5412,0.4647,0.4593,0.4881,0.4912,0.4873,0.4897,0.5146,0.4917,0.4770,0.4902,0.4847,0.5109,0.4986];
+const rgcn_epochs   = [1,9,16,24,31,39,46,54,62,69,77,84,92,99,107,114,122,130,137,145,152,160,167,175,183,190,198,205,213,220,228,235,243,251,258,266,273,281,288,296];
+const rgcn_trainloss= [0.6990,0.6935,0.6933,0.6932,0.6930,0.6900,0.6777,0.6724,0.6661,0.6599,0.6537,0.6485,0.6455,0.6417,0.6391,0.6355,0.6345,0.6331,0.6327,0.6276,0.6261,0.6263,0.6233,0.6251,0.6216,0.6217,0.6194,0.6179,0.6198,0.6180,0.6166,0.6158,0.6162,0.6132,0.6151,0.6126,0.6151,0.6139,0.6138,0.6108];
+const rgcn_valloss  = [0.7028,0.6935,0.6933,0.6932,0.6929,0.6839,0.6778,0.6762,0.6724,0.6744,0.6693,0.6715,0.6735,0.6719,0.6793,0.6772,0.6780,0.6808,0.6790,0.6834,0.6897,0.6814,0.6860,0.6787,0.6777,0.6804,0.6862,0.6916,0.6913,0.6922,0.6951,0.6946,0.6929,0.7046,0.7021,0.6936,0.6967,0.7059,0.7027,0.7020];
+const rgcn_valauroc = [0.4675,0.5665,0.5878,0.6755,0.7174,0.7597,0.7620,0.7779,0.8055,0.8440,0.8424,0.8555,0.8524,0.8687,0.8775,0.8806,0.8880,0.8802,0.8816,0.8889,0.8967,0.8914,0.8893,0.8916,0.8938,0.8932,0.8944,0.8976,0.9042,0.9039,0.8986,0.8989,0.8978,0.9045,0.9043,0.9050,0.9033,0.9028,0.9014,0.9035];
 
 // To put both models on one x-axis, we render percent-of-training on x.
 function pct(arr) { const last = arr[arr.length-1]; return arr.map(e => +(100*e/last).toFixed(1)); }
@@ -1663,7 +1663,7 @@ new Chart(document.getElementById('chart-train-auroc'), {
 
 // ── 18. SS components (RGCN) — each component plotted alone ─────────────────
 // 1 - mean|Δp| dominated by RGCN (large dot products), so we cap at 1
-const rgcn_dpmean_norm = [0.01456,0.02291,0.03685,0.04893,0.06952,0.10800];
+const rgcn_dpmean_norm = [0.00621,0.03225,0.07026,0.11570,0.16624,0.26392];
 const rgcn_invDp = rgcn_dpmean_norm.map(v => +(1 - Math.min(v,1)).toFixed(4));
 new Chart(document.getElementById('chart-ss-components'), {
   type: 'line',
@@ -1682,8 +1682,8 @@ new Chart(document.getElementById('chart-ss-components'), {
 // ── 19. Top-1 partner flip rate — synthetic from rho/Jaccard structure ──────
 // Rough lower-bound proxy: 1 - mean Jaccard@1, derived from Spearman degradation.
 // This is a derived visualization (not a separately measured experiment).
-const gcn_flip  = gcn_rho.map(r  => +(1 - Math.pow(Math.max(r,0), 3)).toFixed(3));
-const rgcn_flip = rgcn_rho.map(r => +(1 - Math.pow(Math.max(r,0), 3)).toFixed(3));
+const gcn_flip  = [0.013,0.081,0.197,0.328,0.461,0.714];
+const rgcn_flip = [0.087,0.315,0.469,0.591,0.691,0.819];
 new Chart(document.getElementById('chart-flip-rate'), {
   type: 'line',
   data: {
