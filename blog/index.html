@@ -228,8 +228,8 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     </div>
     <div class="hero-stats">
       <div class="hstat">
-        <div class="sv" style="color:var(--purplel)" id="cnt-auroc">0.000</div>
-        <div class="sl">RGCN AUROC</div>
+        <div class="sv" style="color:var(--purplel)" id="cnt-AUROC">0.000</div>
+        <div class="sl">R-GCN AUROC</div>
       </div>
       <div class="hstat">
         <div class="sv" style="color:var(--cyan)" id="cnt-edges">0</div>
@@ -256,11 +256,11 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   </div>
 
   <div class="prose reveal reveal-d1">
-    <p>An estimated 1.3 million americans visit the er due to adverse drug reactions each year. Many of those er visits are attributed to interactions among medications that individually cause few problems. The combination of medications can be hazardous -- a patient taking 10 medications will have 45 possible medication pairings and 120 possible medication triplets. There is no physician who maintains a table of the combinations of medications. Likewise, no pharmaceutical company wrote a warning label indicating that there may be potential drug interactions with other medications. Graph neural networks have emerged as the predominant computational tool to address this issue. The rationale behind using GNNs is straightforward – drugs are represented as nodes, the existing relationships between drugs are indicated by edges, and the relationship between nodes and edges provide insight regarding the likelihood of a previously unknown interaction. Recent studies demonstrate that graph neural networks consistently yield high area under the receiver operating curve (auroc) values (greater than .90) on various benchmarks. While the reported auroc value provides reassurance, the reported auroc value masks important information. A model used in a clinical environment is only useful if changes in input lead to commensurate changes in output. For example, a small change in a drug’s learned embedding causes a significant change (60%) in the list of candidate medications identified for that drug. Thus, when clinicians ask the model “what are the most likely candidates for this drug,” they receive a list of drugs whose identity may depend on variations in training data. Although auroc measures predictive ability, it does not account for changes in the lists of candidate medications. Therefore, we seek to enable auroc to measure changes in the lists of candidate medications.</p>
+    <p>An estimated 1.3 million americans visit the er due to adverse drug reactions each year. Many of those er visits are attributed to interactions among medications that individually cause few problems. The combination of medications can be hazardous -- a patient taking 10 medications will have 45 possible medication pairings and 120 possible medication triplets. There is no physician who maintains a table of the combinations of medications. Likewise, no pharmaceutical company wrote a warning label indicating that there may be potential drug interactions with other medications. Graph neural networks have emerged as the predominant computational tool to address this issue. The rationale behind using GNNs is straightforward, drugs are represented as nodes, the existing relationships between drugs are indicated by edges, and the relationship between nodes and edges provide insight regarding the likelihood of a previously unknown interaction. Recent studies demonstrate that graph neural networks consistently yield high area under the receiver operating curve, AUROC, values, greater than .90, on various benchmarks. While the reported AUROC value provides reassurance, the reported AUROC value masks important information. A model used in a clinical environment is only useful if changes in input lead to commensurate changes in output. For example, a small change in a drug’s learned embedding causes a significant change, 60%, in the list of candidate medications identified for that drug. Thus, when clinicians ask the model what are the most likely candidates for this drug, they receive a list of drugs whose identity may depend on variations in training data. Although AUROC measures predictive ability, it does not account for changes in the lists of candidate medications. Therefore, we seek to enable AUROC to measure changes in the lists of candidate medications.</p>
 
-    <p>Graph neural networks have become the dominant computational approach to this problem. The pitch is intuitive — drugs are nodes, known interactions are edges, and the topology of the network, plus auxiliary biology like shared protein targets, should be informative about which untested pairs are dangerous. Recent benchmarks routinely report AUROC above 0.9 on standard splits. The headline number is reassuring.</p>
+    <p>Graph neural networks have become the dominant computational approach to this problem. The pitch is intuitive, drugs are nodes, known interactions are edges, and the topology of the network, plus auxiliary biology like shared protein targets, should be informative about which untested pairs are dangerous. Recent benchmarks routinely report AUROC above 0.9 on standard splits. The headline number is reassuring.</p>
 
-    <p>This project is about what that headline number leaves out. A model is useful in a clinical setting only if a small change in its inputs produces a small change in its outputs. If a tiny embedding perturbation reshuffles the top-twenty candidate interactions for a given drug by sixty percent, then a clinician asking the model "show me the most likely interactions for this drug" is being shown a list whose composition is, in part, an artifact of training noise. AUROC is silent about this. We want to make it speak.</p>
+    <p>This project is about what that headline number leaves out. A model is useful in a clinical setting only if a small change in its inputs produces a small change in its outputs. If a tiny embedding perturbation reshuffles the top-twenty candidate interactions for a given drug by sixty percent, then a clinician asking the model show me the most likely interactions for this drug is being shown a list whose composition is, in part, an artifact of training noise. AUROC is silent about this. We want to make it speak.</p>
 
     <h3>The hypothesis in one sentence</h3>
     <p><em>Predicted drug interactions generated by graph neural networks exhibit instability under small perturbations in learned embeddings for drugs and are unstable. Furthermore, the models exhibiting the highest accuracy in predicting drug interactions are often not representative in terms of how much of that accuracy can be maintained under perturbation.</em></p>
@@ -377,13 +377,13 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
       <p>There are three distinct bodies of research in the field of computer science upon which this research draws. Understanding where they intersect is what allowed us to develop our experimental design.</p>
 
       <h3>Network biology and link prediction</h3>
-      <p>Early computational treatments of drug-drug interactions viewed the problem as link prediction on homogeneous graphs. Vilar et al. (2012) demonstrated that a set of edges representing similarities between molecules that are propagated through known interaction networks could identify plausible new interactions. Cheng and zhao (2014) developed a systematic comparison of methods, while subsequent follow-on work (e.g., Ferdousi et al., 2017; Kastrin et al., 2018) further elaborated methods for generating features. Methods in this early period were rarely exciting: they employed neighbor counts, Adamic-Adar similarity and matrix factorization. However, these methods were surprisingly difficult to exceed. As illustrated in our experiments below, a parameter-free common-neighbor heuristics achieves an auroc value of approximately 0.887 — nearly within three points of achieving the best auroc value using a fully trained relational gnn.</p>
+      <p>Early computational treatments of drug-drug interactions viewed the problem as link prediction on homogeneous graphs. Vilar et al. (2012) demonstrated that a set of edges representing similarities between molecules that are propagated through known interaction networks could identify plausible new interactions. Cheng and zhao (2014) developed a systematic comparison of methods, while subsequent follow-on work (e.g., Ferdousi et al., 2017; Kastrin et al., 2018) further elaborated methods for generating features. Methods in this early period were rarely exciting: they employed neighbor counts, Adamic-Adar similarity and matrix factorization. However, these methods were surprisingly difficult to exceed. As illustrated in our experiments below, a parameter-free common-neighbor heuristics achieves an AUROC value of approximately 0.887, nearly within three points of achieving the best AUROC value using a fully trained relational GNN.</p>
 
       <h3>The graph neural network era</h3>
-      <p>The current wave of gnn research started with kipf and welling’s gcn (2017), which formulated spectral graph convolution as a propagative rule that enabled scalability to large graphs. A direct extension to biomedical knowledge — where edges are not all identical — was Schlichtkrull et al.’s relational gcn (r-gcn, 2018), which assigned different transformation matrices to each relation type. A close relative of r-gcn, Decagon (Zitnik et al., 2018), was adopted as the canonical biomedical benchmark to predict polypharmacy side effects on a heterogeneous graph that closely matches the graph used in our study. The arc of progress for this body of work is steady increases in predictive accuracy coupled with steady growth in methodological coherence. By 2022, it had become typical to report auroc values greater than 0.9 on commonly-used DDI benchmarks. However, it remained unusual to report anything regarding how those numbers behave under perturbation.</p>
+      <p>The current wave of GNN research started with kipf and welling’s GCN (2017), which formulated spectral graph convolution as a propagative rule that enabled scalability to large graphs. A direct extension to biomedical knowledge, where edges are not all identical, was Schlichtkrull et al.’s relational GCN (R-GCN, 2018), which assigned different transformation matrices to each relation type. A close relative of R-GCN, Decagon (Zitnik et al., 2018), was adopted as the canonical biomedical benchmark to predict polypharmacy side effects on a heterogeneous graph that closely matches the graph used in our study. The arc of progress for this body of work is steady increases in predictive accuracy coupled with steady growth in methodological coherence. By 2022, it had become typical to report AUROC values greater than 0.9 on commonly-used DDI benchmarks. However, it remained unusual to report anything regarding how those numbers behave under perturbation.</p>
 
       <h3>Stability, robustness, and certification</h3>
-      <p>Simultaneously, a developing literature on gnn robustness has evolved out of the adversarial examples tradition. Zügner et al. (2018) demonstrated that an attacker capable of flipping a relatively small number of edges could significantly alter the classification output for a given node. Dai et al. (2018) extended this finding to reinforcement learning attacks. Defensive responses to these findings appeared in two forms: empirical defenses (such as graph purification, attention re-weighting) and certified defenses using randomized smoothing (Bojchevski & Günnemann, 2019; Schuchardt et al., 2021). Certified defenses directly added stochastic noise to the graph and assessed how many predictions would be provably unchanged under that noise. Our project operates within this second tradition but adapts it toward a different end goal. Rather than defending against an adversary, we are conducting an audit of a deployed model. Instead of asking "does there exist some perturbation that can break this model?", we are asking "under what kinds of perturbations that a real embedding might experience — i.e., small, isotropic, structureless — how stable are the rankings produced by this model?". To our knowledge, sublime (liu et al., 2022) and the Graph Robustness Benchmark (Zheng et al., 2021) represent the closest works in spirit to ours. However, neither perform the embedding-level post-hoc audit that we describe.</p>
+      <p>Simultaneously, a developing literature on GNN robustness has evolved out of the adversarial examples tradition. Zügner et al. (2018) demonstrated that an attacker capable of flipping a relatively small number of edges could significantly alter the classification output for a given node. Dai et al. (2018) extended this finding to reinforcement learning attacks. Defensive responses to these findings appeared in two forms: empirical defenses (such as graph purification, attention re-weighting) and certified defenses using randomized smoothing (Bojchevski & Günnemann, 2019; Schuchardt et al., 2021). Certified defenses directly added stochastic noise to the graph and assessed how many predictions would be provably unchanged under that noise. Our project operates within this second tradition but adapts it toward a different end goal. Rather than defending against an adversary, we are conducting an audit of a deployed model. Instead of asking "does there exist some perturbation that can break this model?", we are asking "under what kinds of perturbations that a real embedding might experience, i.e., small, isotropic, structureless, how stable are the rankings produced by this model?". To our knowledge, sublime (liu et al., 2022) and the Graph Robustness Benchmark (Zheng et al., 2021) represent the closest works in spirit to ours. However, neither perform the embedding-level post-hoc audit that we describe.</p>
     </div>
   </div>
 </section>
@@ -395,13 +395,13 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     <h2 class="stitle">The Closest Paper<br><span class="grad">And Where We Diverge</span></h2>
   </div>
   <div class="prose reveal reveal-d1">
-    <p>The closest paper to our study is Decagon (Zitnik et al., 2018). Decagon constructed a heterogeneous biomedical knowledge graph from the same BioSNAP resources that we employ, trained an r-gcn style model on that graph and achieved state-of-the-art performance for multi-class side effect prediction. Our core model is similarly designed to be equivalent: we reused Decagon’s data sources and a comparable two-layer relational gnn with a dot product decoder. Therefore, our project differs from Decagon’s primarily in terms of the question asked of the model rather than the model itself.</p>
+    <p>The closest paper to our study is Decagon (Zitnik et al., 2018). Decagon constructed a heterogeneous biomedical knowledge graph from the same BioSNAP resources that we employ, trained an R-GCN style model on that graph and achieved state-of-the-art performance for multi-class side effect prediction. Our core model is similarly designed to be equivalent: we reused Decagon’s data sources and a comparable two-layer relational GNN with a dot product decoder. Therefore, our project differs from Decagon’s primarily in terms of the question asked of the model rather than the model itself.</p>
 
     <p>Three things distinguish what follows from prior work:</p>
     <ol>
-      <li><strong>Embedding-space perturbation as a separate audit.</strong> Most GNN robustness studies perturb the input graph — flip an edge, drop a node, add a fake feature. We instead freeze the trained network and inject noise directly into the learned embedding vectors. This isolates the geometry of the learned representation from the dynamics of message passing. To our knowledge, no published DDI study reports this specific decomposition.</li>
+      <li><strong>Embedding-space perturbation as a separate audit.</strong> Most GNN robustness studies perturb the input graph, flip an edge, drop a node, add a fake feature. We instead freeze the trained network and inject noise directly into the learned embedding vectors. This isolates the geometry of the learned representation from the dynamics of message passing. To our knowledge, no published DDI study reports this specific decomposition.</li>
       <li><strong>A composite Stability Score combining three signals.</strong> Predicted-probability shift, Spearman rank correlation, and top-K Jaccard overlap each capture a different failure mode that matters clinically. Reporting any one of them in isolation hides regimes where the others are catastrophic. We combine them into a single score in [0, 1] that we then use uniformly across every experiment.</li>
-      <li><strong>Edge-type ablation along the accuracy-stability axis.</strong> The headline qualitative finding of the paper — that the auxiliary edges most responsible for accuracy gains are also the ones most responsible for stability losses — required ablating each relation type in turn and measuring both quantities on each variant. We are not aware of a comparable accuracy-versus-stability ablation table for biomedical knowledge graphs.</li>
+      <li><strong>Edge-type ablation along the accuracy-stability axis.</strong> The headline qualitative finding of the paper, that the auxiliary edges most responsible for accuracy gains are also the ones most responsible for stability losses, required ablating each relation type in turn and measuring both quantities on each variant. We are not aware of a comparable accuracy-versus-stability ablation table for biomedical knowledge graphs.</li>
     </ol>
 
     <p>If this project is "new", it is novel in the same manner as a carefully-conducted chemistry experiment is novel: not in terms of reagents used, but in what was measured and what was found.</p>
@@ -564,7 +564,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     <div class="reveal reveal-d2" style="margin-top:28px">
       <div class="ccrd">
         <div class="ctitle">Heterogeneous Knowledge Graph Structure</div>
-        <div class="csub">Three node types connected by four relation types — RGCN assigns separate weight matrices per relation</div>
+        <div class="csub">Three node types connected by four relation types — R-GCN assigns separate weight matrices per relation</div>
         <div class="network-wrap">
           <svg width="680" height="200" viewBox="0 0 680 200" style="max-width:100%;height:auto">
             <!-- Edges -->
@@ -617,7 +617,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   <div class="reveal">
     <div class="slabel">§ 6 · Model Architectures</div>
     <h2 class="stitle">Three Approaches,<br><span class="grad">One Stability Audit</span></h2>
-    <p class="sdesc">We evaluate a parameter-free heuristic, a structure-only gcn, and a multi-relational RGCN on our dataset. Predictions from GNNs utilize a dot-product decoder with sigmoid activation functions on 64-dimensional vectors representing each drug.</p>
+    <p class="sdesc">We evaluate a parameter-free heuristic, a structure-only GCN, and a multi-relational R-GCN on our dataset. Predictions from GNNs utilize a dot-product decoder with sigmoid activation functions on 64-dimensional vectors representing each drug.</p>
   </div>
   <div class="g3">
     <div class="mcrd reveal reveal-d1" style="border-color:rgba(6,182,212,.2)">
@@ -641,7 +641,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     <div class="mcrd reveal reveal-d3" style="border-color:rgba(139,92,246,.25)">
       <div class="mglow" style="background:var(--purple)"></div>
       <div class="micon" style="background:rgba(139,92,246,.15)">🕸️</div>
-      <div class="mname">RGCN (Multi-Relational)</div>
+      <div class="mname">R-GCN (Multi-Relational)</div>
       <div class="mdesc">2-layer Relational GCN on full heterogeneous graph (7 relation types). Separate weight matrices per relation, basis decomposition (2 bases).</div>
       <div class="mrow"><span class="mlbl">AUROC</span><span class="mval" style="color:var(--purple)">0.912 ★</span></div>
       <div class="mrow"><span class="mlbl">AUPRC</span><span class="mval" style="color:var(--purple)">0.705 ★</span></div>
@@ -659,24 +659,24 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   <div class="sec-inner">
     <div class="reveal">
       <div class="slabel">§ 7 · Predictive Accuracy</div>
-      <h2 class="stitle">RGCN Dominates—<br><span class="grad">But Heuristic Beats GCN</span></h2>
-      <p class="sdesc">Multi-relational r-gcn outperforms structure-only gcn on all metrics evaluated including auroc (0.917 vs. 0.827), demonstrating that incorporating multiple types of context contributes significantly to predictive accuracy. Notably, the parameter-free heuristic employing common neighbors outperforms structure-only gcn — raw topology serves as a surprisingly effective baseline for densely connected DDI graphs.</p>
+      <h2 class="stitle">R-GCN Dominates—<br><span class="grad">But Heuristic Beats GCN</span></h2>
+      <p class="sdesc">The multi-relational R-GCN performs better than the structure-only GCN across each of the evaluation metrics, with an area under the receiver operating characteristic curve (AUROC) at 0.917 versus 0.827. This demonstrates how the inclusion of various types of context can substantially improve prediction performance. It is also notable that parameter-free heuristics using common neighbors performed better than the structure-only GCN. It is surprising that simply using raw topology would be such a good baseline for predicting in highly connected DDI networks.</p>
     </div>
     <div class="g2c">
       <div class="ccrd reveal reveal-d1">
         <div class="ctitle">Model Accuracy — AUROC &amp; AUPRC</div>
-        <div class="csub">Darker bars = AUROC · Lighter bars = AUPRC · RGCN leads on both metrics</div>
+        <div class="csub">Darker bars = AUROC · Lighter bars = AUPRC · R-GCN leads on both metrics</div>
         <div class="cw"><canvas id="chart-accuracy"></canvas></div>
       </div>
       <div class="ccrd reveal reveal-d2">
         <div class="ctitle">Ranking Performance — Hits@K</div>
-        <div class="csub">Fraction of true interactions within the top-K predictions · RGCN hits 30.8% of true pairs in top-50</div>
+        <div class="csub">Fraction of true interactions within the top-K predictions · R-GCN hits 30.8% of true pairs in top-50</div>
         <div class="cw"><canvas id="chart-hits"></canvas></div>
       </div>
     </div>
     <div class="ccrd reveal reveal-d3" style="margin-top:22px">
       <div class="ctitle">Approximate ROC Curves</div>
-      <div class="csub">Constructed from AUROC values · RGCN (purple) dominates throughout · diagonal line = random baseline</div>
+      <div class="csub">Constructed from AUROC values · R-GCN (purple) dominates throughout · diagonal line = random baseline</div>
       <div class="cw-lg"><canvas id="chart-roc"></canvas></div>
     </div>
     <div class="ccrd reveal reveal-d4" style="margin-top:22px">
@@ -689,26 +689,26 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
           <tbody>
             <tr><td>Heuristic</td><td>0.886</td><td>0.552</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
             <tr><td>GCN</td><td>0.836</td><td>0.457</td><td>0.009</td><td>0.014</td><td>0.035</td><td>0.103</td><td>0.842</td><td>0.701</td><td>0.506</td></tr>
-            <tr><td>RGCN</td><td class="best">0.912</td><td class="best">0.705</td><td class="best">0.039</td><td class="best">0.086</td><td class="best">0.149</td><td class="best">0.314</td><td>0.826</td><td>0.684</td><td>0.492</td></tr>
+            <tr><td>R-GCN</td><td class="best">0.912</td><td class="best">0.705</td><td class="best">0.039</td><td class="best">0.086</td><td class="best">0.149</td><td class="best">0.314</td><td>0.826</td><td>0.684</td><td>0.492</td></tr>
           </tbody>
         </table>
       </div>
     </div>
     <div class="wbox reveal">
-      <strong style="color:var(--orange)">Key Observation:</strong> Important finding: common neighbor heuristic achieves comparable performance as structure-only gcn on dense DDI graphs Common-neighbor heuristic achieves auroc value of approximately 0.887 — within three points of fully-trained relational gnn The fact that common neighbor heuristic achieves a comparable auroc value compared to fully-trained relational gnn on DDI tasks illustrates how topologically-derived features serve as effective features for densely-connected DDI graphs — fully-trained relational gnn requires additional auxiliary context to achieve better performance than naive baseline features.
+      <strong>Key Observation:</strong> A key observation is that the common neighbor approach performs similarly to graph convolutional networks (GCN) trained solely with structural information in terms of performance on DDI data. Common Neighbor Heuristic Achieves an AUROC Value of Approximately 0.887 .Within Three Points of Fully Trained Relational GNN The AUROC values achieved by common neighbor heuristics are comparable to those achieved by fully trained relational GNNs in the DDI space, illustrating how topological derived feature types can be used effectively as feature types for DDI data that have high density. In addition to being able to use naive baseline feature types, full relational GNN requires additional contextual information to perform better than the former.
     </div>
 
     <!-- ── Figure 4 · Training curves ────────────────────────────────────────── -->
     <div class="g2c" style="margin-top:22px">
       <div class="ccrd reveal reveal-d1">
         <div class="ctitle">Figure 3a · Training loss vs epoch</div>
-        <div class="csub">RGCN (500 epochs) crosses the cross-entropy floor visibly earlier than GCN (62 epochs) · Gap between train and val loss stays small — neither model overfits the DDI edge prediction task</div>
+        <div class="csub">R-GCN (500 epochs) crosses the cross-entropy floor visibly earlier than GCN (62 epochs) · Gap between train and val loss stays small — neither model overfits the DDI edge prediction task</div>
         <div class="cw"><canvas id="chart-train-loss"></canvas></div>
       </div>
       <div class="ccrd reveal reveal-d2">
         <div class="ctitle">Figure 3b · Validation AUROC vs epoch</div>
-        <div class="csub">RGCN climbs to ≈0.91 and plateaus · GCN spikes early then slowly settles at ≈0.79 · Both used early-stopping on val AUROC plateau</div>
-        <div class="cw"><canvas id="chart-train-auroc"></canvas></div>
+        <div class="csub">R-GCN climbs to ≈0.91 and plateaus · GCN spikes early then slowly settles at ≈0.79 · Both used early-stopping on val AUROC plateau</div>
+        <div class="cw"><canvas id="chart-train-AUROC"></canvas></div>
       </div>
     </div>
     <div class="figcap" style="margin-top:8px">Training history is embedded directly in this page from unified notebook outputs, downsampled to 40 points per curve for readability.</div>
@@ -823,7 +823,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
 
   <div class="ccrd reveal reveal-d2" style="margin-top:24px">
     <div class="ctitle">Stability Score vs. Gaussian Noise Intensity</div>
-    <div class="csub">Shaded bands = ±1 std over 10 trials · Both models degrade similarly — RGCN's accuracy advantage does NOT confer stability</div>
+    <div class="csub">Shaded bands = ±1 std over 10 trials · Both models degrade similarly — R-GCN's accuracy advantage does NOT confer stability</div>
     <div class="cw-lg"><canvas id="chart-ss"></canvas></div>
   </div>
   <div class="g2c" style="margin-top:22px">
@@ -834,7 +834,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     </div>
     <div class="ccrd reveal reveal-d2">
       <div class="ctitle">Mean |Δp| — Predicted Probability Shift</div>
-      <div class="csub">Average absolute change in predicted DDI probability · RGCN magnitudes are dramatically larger due to its sigmoid operating on larger dot products</div>
+      <div class="csub">Average absolute change in predicted DDI probability · R-GCN magnitudes are dramatically larger due to its sigmoid operating on larger dot products</div>
       <div class="cw"><canvas id="chart-deltap"></canvas></div>
     </div>
   </div>
@@ -847,24 +847,24 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   <!-- ── Figure 5 · SS components decomposition + flip rate ─────────────────── -->
   <div class="g2c" style="margin-top:22px">
     <div class="ccrd reveal reveal-d1">
-      <div class="ctitle">Figure 5a · SS components for the RGCN</div>
+      <div class="ctitle">Figure 5a · SS components for the R-GCN</div>
       <div class="csub">Each component of the Stability Score plotted alone — they degrade at different rates, which is precisely why combining them is informative. Top-K overlap collapses fastest; rank correlation falls more gradually; |Δp| grows steadily.</div>
       <div class="cw"><canvas id="chart-ss-components"></canvas></div>
     </div>
     <div class="ccrd reveal reveal-d2">
       <div class="ctitle">Figure 5b · Per-drug top-1 partner flip rate</div>
-      <div class="csub">Fraction of drugs whose top-ranked predicted partner changes after perturbation · At σ=0.10 the RGCN flips roughly half of all top-1 calls — a clinically meaningful failure mode even when AUROC reads "fine."</div>
+      <div class="csub">Fraction of drugs whose top-ranked predicted partner changes after perturbation · At σ=0.10 the R-GCN flips roughly half of all top-1 calls — a clinically meaningful failure mode even when AUROC reads "fine."</div>
       <div class="cw"><canvas id="chart-flip-rate"></canvas></div>
     </div>
   </div>
   <div class="g4 reveal reveal-d4" style="margin-top:20px">
     <div class="mstat card"><div class="mstat-v" style="color:var(--bluel)">0.960</div><div class="mstat-l">GCN SS @ σ=0.01</div></div>
-    <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.957</div><div class="mstat-l">RGCN SS @ σ=0.01</div></div>
+    <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.957</div><div class="mstat-l">R-GCN SS @ σ=0.01</div></div>
     <div class="mstat card"><div class="mstat-v" style="color:var(--bluel)">0.422</div><div class="mstat-l">GCN SS @ σ=0.30</div></div>
-    <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.376</div><div class="mstat-l">RGCN SS @ σ=0.30</div></div>
+    <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.376</div><div class="mstat-l">R-GCN SS @ σ=0.30</div></div>
   </div>
   <div class="hbox reveal">
-    <strong style="color:var(--bluel)">Headline Finding:</strong> Both models dropped dramatically from auroc values near 0.96 at σ=0.01 to auroc values ranging from approximately 0.39–0.47 at σ=0.30. Surprisingly despite clearly superior accuracy, embeddings for r-gcn were not more stable — and possibly even slightly less stable at higher levels of σ. This directly supports our primary hypothesis: accuracy gains do not automatically translate into representational robustness.
+    <strong style="color:var(--bluel)">Headline Finding:</strong> Both models had a dramatic drop in AUROC values from about 0.96 at σ = 0.01 to approximately 0.39–0.47 at σ = 0.30. It is surprising that despite being substantially more accurate than R-GCN, embeddings for R-GCN were not more representative, stable, and may have been slightly less representative, stable as σ increased. This directly substantiates our primary hypothesis: accuracy increases do not necessarily equate to greater representational stability.
   </div>
 </section>
 
@@ -879,12 +879,12 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     <div class="g2c">
       <div class="ccrd reveal reveal-d1">
         <div class="ctitle">Stability Score under Dimensional Dropout</div>
-        <div class="csub">Both models maintain higher SS than under Gaussian noise · GCN and RGCN track closely in this regime</div>
+        <div class="csub">Both models maintain higher SS than under Gaussian noise · GCN and R-GCN track closely in this regime</div>
         <div class="cw"><canvas id="chart-dss"></canvas></div>
       </div>
       <div class="ccrd reveal reveal-d2">
         <div class="ctitle">Spearman ρ under Dimensional Dropout</div>
-        <div class="csub">Rank correlation degrades more gracefully under structured dropout · RGCN slightly higher at 5–20% rates</div>
+        <div class="csub">Rank correlation degrades more gracefully under structured dropout · R-GCN slightly higher at 5–20% rates</div>
         <div class="cw"><canvas id="chart-drho"></canvas></div>
       </div>
     </div>
@@ -895,9 +895,9 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     </div>
     <div class="g4 reveal reveal-d4" style="margin-top:20px">
       <div class="mstat card"><div class="mstat-v" style="color:var(--bluel)">0.591</div><div class="mstat-l">GCN @ 50% dropout</div><div class="mstat-s">vs 0.422 at σ=0.30 Gaussian</div></div>
-      <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.653</div><div class="mstat-l">RGCN @ 50% dropout</div><div class="mstat-s">vs 0.376 at σ=0.30 Gaussian</div></div>
+      <div class="mstat card"><div class="mstat-v" style="color:var(--purplel)">0.653</div><div class="mstat-l">R-GCN @ 50% dropout</div><div class="mstat-s">vs 0.376 at σ=0.30 Gaussian</div></div>
       <div class="mstat card"><div class="mstat-v" style="color:var(--cyan)">0.968</div><div class="mstat-l">GCN ρ @ 10% dropout</div><div class="mstat-s">vs 0.906 at σ=0.05 Gaussian</div></div>
-      <div class="mstat card"><div class="mstat-v" style="color:var(--green)">0.939</div><div class="mstat-l">RGCN ρ @ 10% dropout</div><div class="mstat-s">vs 0.882 at σ=0.05 Gaussian</div></div>
+      <div class="mstat card"><div class="mstat-v" style="color:var(--green)">0.939</div><div class="mstat-l">R-GCN ρ @ 10% dropout</div><div class="mstat-s">vs 0.882 at σ=0.05 Gaussian</div></div>
     </div>
   </div>
 </section>
@@ -907,13 +907,13 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   <div class="reveal">
     <div class="slabel">§ 10 · Edge-Type Ablation</div>
     <h2 class="stitle">The Accuracy–Stability<br><span class="grad">Trade-Off Exposed</span></h2>
-    <p class="sdesc">We sequentially removed one auxiliary edge type at-a-time from r-gcn architecture. Clear patterns emerge: edge types contributing most significantly to increased accuracy also contribute most significantly to reduced embedding space stability:</p>
+    <p class="sdesc">We sequentially removed one auxiliary edge type at-a-time from R-GCN architecture. Clear patterns emerge: edge types contributing most significantly to increased accuracy also contribute most significantly to reduced embedding space stability:</p>
   </div>
   <div class="g2c">
     <div class="ccrd reveal reveal-d1">
       <div class="ctitle">Ablation AUROC by Edge Configuration</div>
       <div class="csub">Drug-Gene edges drive the most accuracy — removing them causes the largest drop (0.912 → 0.909)</div>
-      <div class="cw"><canvas id="chart-abl-auroc"></canvas></div>
+      <div class="cw"><canvas id="chart-abl-AUROC"></canvas></div>
     </div>
     <div class="ccrd reveal reveal-d2">
       <div class="ctitle">Ablation Stability Score (σ=0.10) by Edge Configuration</div>
@@ -927,7 +927,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     <div class="cw-lg"><canvas id="chart-ablation"></canvas></div>
   </div>
   <div class="wbox reveal" style="margin-top:20px">
-    <strong style="color:var(--orange)">Accuracy–Stability Trade-Off:</strong> Removal of Disease-Drug edges results in decrease in auroc value of 1.6 but increase in stability score value by 4.3. These edges introduce long-range dependencies that contribute positively to predictive accuracy but make embeddings more complex and thus more susceptible to perturbation. Future work should investigate techniques that regulate jacobians for disentangling stability and accuracy objectives.
+    <strong style="color:var(--orange)">Accuracy–Stability Trade-Off:</strong> Removal of Disease-Drug edges results in decrease in AUROC value of 1.6 but increase in stability score value by 4.3. These edges introduce long-range dependencies that contribute positively to predictive accuracy but make embeddings more complex and thus more susceptible to perturbation. Future work should investigate techniques that regulate jacobians for disentangling stability and accuracy objectives.
   </div>
 </section>
 
@@ -941,8 +941,8 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     </div>
     <div class="ccrd reveal reveal-d1">
       <div class="ctitle">Cold-Start vs. Standard: AUROC Collapse</div>
-      <div class="csub">GCN AUROC collapses from 0.836 to 0.127 (−85%) · RGCN from 0.912 to 0.353 (−61%) · Random chance = 0.5</div>
-      <div class="cw-lg"><canvas id="chart-cold-auroc"></canvas></div>
+      <div class="csub">GCN AUROC collapses from 0.836 to 0.127 (−85%) · R-GCN from 0.912 to 0.353 (−61%) · Random chance = 0.5</div>
+      <div class="cw-lg"><canvas id="chart-cold-AUROC"></canvas></div>
     </div>
     <div class="ccrd reveal reveal-d2" style="margin-top:22px">
       <div class="ctitle">The Stability Paradox: AUROC vs. Stability Score in Cold-Start</div>
@@ -961,7 +961,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
         <div style="margin-top:10px;font-size:12px;color:var(--t2)">AUROC collapse: <span style="color:var(--red);font-weight:700">↓ 87.2%</span></div>
       </div>
       <div class="card">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--purplel);margin-bottom:16px">RGCN</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--purplel);margin-bottom:16px">R-GCN</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Standard AUROC</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700">0.912</div></div>
           <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--t2);margin-bottom:4px">Cold-Start AUROC</div><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--red)">0.353</div></div>
@@ -985,25 +985,25 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   </div>
   <div class="prose reveal reveal-d1">
     <h3>What we tried, briefly</h3>
-    <p>Prior to describing which aspects performed: one-sentence summary of experiments conducted above. All content presented below represents our reflection on each individual aspect — what each experiment told us regarding where answers were clear-cut versus ambiguous/ unclear.</p>
+    <p>Prior to describing which aspects performed: one-sentence summary of experiments conducted above. All content presented below represents our reflection on each individual aspect, what each experiment told us regarding where answers were clear-cut versus ambiguous/ unclear.</p>
     <ol>
       <li><strong>Built a single heterogeneous DDI knowledge graph</strong> from four BioSNAP files (drug-drug, drug-gene, disease-gene, disease-drug), totaling ~552K edges across 1.5K drugs, 9.6K genes, and 6.0K diseases.</li>
-      <li><strong>Trained three baselines</strong> on the same 80/10/10 split: a parameter-free common-neighbor heuristic, a 2-layer structure-only GCN, and a 2-layer multi-relational R-GCN — all with 64-dim embeddings, dot-product decoder, and BCE loss with 1:5 negative sampling.</li>
+      <li><strong>Trained three baselines</strong> on the same 80/10/10 split: a parameter-free common-neighbor heuristic, a 2-layer structure-only GCN, and a 2-layer multi-relational R-GCN, all with 64-dim embeddings, dot-product decoder, and BCE loss with 1:5 negative sampling.</li>
       <li><strong>Defined a composite Stability Score</strong> combining predicted-probability shift, Spearman rank correlation, and top-20 Jaccard overlap.</li>
-      <li><strong>Ran two perturbation regimes:</strong> isotropic Gaussian noise on frozen embeddings at six σ levels, and Bernoulli dimensional dropout at five rates — ten trials per level, with the seed and weights frozen across trials.</li>
+      <li><strong>Ran two perturbation regimes:</strong> isotropic Gaussian noise on frozen embeddings at six σ levels, and Bernoulli dimensional dropout at five rates, ten trials per level, with the seed and weights frozen across trials.</li>
       <li><strong>Ablated the auxiliary edge types</strong> one at a time (drug-gene, disease-gene, disease-drug) to measure how each contributes separately to accuracy and to stability.</li>
       <li><strong>Ran a cold-start evaluation</strong> that holds out the DDI edges of 151 mid-degree drugs entirely, and asked whether the trade-off looks the same for unseen nodes.</li>
     </ol>
-    <p>Everything that follows is our retrospective on those six things — what each experiment told us, where the answer was clean, and where it was not.</p>
+    <p>Everything that follows is our retrospective on those six things, what each experiment told us, where the answer was clean, and where it was not.</p>
 
     <h3>What worked</h3>
-    <p>Headline result replicated clearly The multi-relational relational-gcn achieved higher accuracy than both structure-only gcn and parameter-free common neighbor heuristic on every metric evaluated below; however both models were equally stable with respect to perturbations applied directly to learned drug embeddings. That alone provides enough evidence to refute implicit assumption clinicians may make when reading "auroc = 0.917" in paper — namely that more accurate model is also more dependable.</p>
+    <p>Headline result replicated clearly The multi-relational relational-GCN achieved higher accuracy than both structure-only GCN and parameter-free common neighbor heuristic on every metric evaluated below; however both models were equally stable with respect to perturbations applied directly to learned drug embeddings. That alone provides enough evidence to refute implicit assumption clinicians may make when reading "AUROC = 0.917" in paper, namely that more accurate model is also more dependable.</p>
 
     <h3>What didn't work</h3>
-    <p>What did not work well was attempt to identify single dial that would allow r-gcn to be both more accurate and more stable Results from edge-type ablation suggest there exists no such dial in current architecture; auxiliary edges providing most information regarding side effects (by wide margin) also most likely to produce instability; removing those edges yields improved stability at measurable cost of loss in predictive accuracy. Going into study we had hoped that one of auxiliary relations would prove to be "free"; improve predictive ability without reducing sharpness of learned embeddings — none did. We also failed to provide a clean story with cold start evaluation For unseen drugs — expected collapse in auroc values occurs; however stability scores improve which contrasts naïve interpretation "more learned structure = more stability." Incorporating specialization and stability are inversely related because embedded representations lying in flatter regions of loss surface are less likely to be trained — this interpretation represents hypothesis for future research that requires controlled experiment to verify correctly by holding all other factors constant and only varying training time.</p>
+    <p>What did not work well was attempt to identify single dial that would allow R-GCN to be both more accurate and more stable Results from edge-type ablation suggest there exists no such dial in current architecture; auxiliary edges providing most information regarding side effects (by wide margin) also most likely to produce instability; removing those edges yields improved stability at measurable cost of loss in predictive accuracy. Going into study we had hoped that one of auxiliary relations would prove to be "free"; improve predictive ability without reducing sharpness of learned embeddings, none did. We also failed to provide a clean story with cold start evaluation For unseen drugs, expected collapse in AUROC values occurs; however stability scores improve which contrasts naïve interpretation "more learned structure = more stability." Incorporating specialization and stability are inversely related because embedded representations lying in flatter regions of loss surface are less likely to be trained, this interpretation represents hypothesis for future research that requires controlled experiment to verify correctly by holding all other factors constant and only varying training time.</p>
 
     <h3>What our metrics of success were, and how we did against them</h3>
-    <p>Success criteria defined prior to project proposal included following: (1) reproduce competitive baseline r-gcn auroc values; (2) define and calculate stability metric over at least two different types of perturbation; and (3) derive quantitative connection between accuracy and stability using ablation analysis. We met all three criteria successfully The r-gcn achieved an auroc value of 0.917 — within published range of Decagon-era benchmarks Stability score is calculated across six levels of Gaussian noise and five levels of dimensional dropout; ten trials per level are used in calculation Ablation table provides direct support for tradeoff identified previously Where we failed to meet own goals relative to success criteria were on theoretical foundation We compute stability number; but do not establish Lipschitz bound that would enable us to state "model is stable up through this magnitude of perturbation with probability x" This separates audit from certificate</p>
+    <p>Success criteria defined prior to project proposal included following: (1) reproduce competitive baseline R-GCN AUROC values; (2) define and calculate stability metric over at least two different types of perturbation; and (3) derive quantitative connection between accuracy and stability using ablation analysis. We met all three criteria successfully The R-GCN achieved an AUROC value of 0.917, within published range of Decagon-era benchmarks Stability score is calculated across six levels of Gaussian noise and five levels of dimensional dropout; ten trials per level are used in calculation Ablation table provides direct support for tradeoff identified previously Where we failed to meet own goals relative to success criteria were on theoretical foundation We compute stability number; but do not establish Lipschitz bound that would enable us to state "model is stable up through this magnitude of perturbation with probability x" This separates audit from certificate</p>
   </div>
 </section>
 
@@ -1015,7 +1015,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
       <h2 class="stitle">A Three-Point<br><span class="grad">Honest Answer</span></h2>
     </div>
     <div class="prose reveal reveal-d1">
-      <p>To judge how much modern machine learning (ML) papers are contributing beyond what we've done before, it makes sense to compare them to the past. And we're willing to try answering that question based on the contributors' criteria instead of dismissing the idea altogether. In our experiment, the common neighbor heuristic achieves AUROC 0.887. The r-gcn achieved 0.917. A reader may find it difficult to resist asking if 0.03 difference in AUROC and the significant engineering overhead required to train and serve a graph neural network is worth the effort. In many cases it isn't. However, "is AI worthwhile?" Breaks down into three separate questions, and each have different responses. So: yes, AI was necessary for doing the project we were able to do. Whether AI is necessary to deploy a DDI predictor is dependent upon which part of the graph the predictor is asked to operate upon, and this decision needs to be determined through empirical experimentation and not as a result of blindly using the largest possible model.</p>
+      <p>To judge how much modern ML papers are contributing beyond what we've done before, it makes sense to compare them to the past. In our experiment, the common neighbor heuristic achieves AUROC 0.887. The R-GCN achieved 0.917. A reader may find it difficult to resist asking if 0.03 difference in AUROC and the significant engineering overhead required to train and serve a graph neural network is worth the effort. In many cases, it isn't. However, "is AI worthwhile?" Breaks down into three separate questions, and each have different responses. So, yes, AI was necessary for doing the project we were able to do. Whether AI is necessary to deploy a DDI predictor is dependent upon which part of the graph the predictor is asked to operate upon, and this decision needs to be determined through empirical experimentation and not as a result of blindly using the largest possible model.</p>
     </div>
   </div>
 </section>
@@ -1041,7 +1041,7 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
       <h2 class="stitle">What This Study<br><span class="grad">Does Not Show</span></h2>
     </div>
     <div class="prose reveal reveal-d1">
-      <p>This project is a research artifact, not deployable system. We explicitly acknowledge this because biomedical ML frequently blurs lines between research artifacts and deployable systems. The clinical risk associated with deploying a DDI predictor is asymmetric: false negative – missed interaction – can harm patient; false positive – spurious interaction – generates background noise that erodes trust of clinicians in tool. Both errors matter and trade off differently against accuracy and against stability. More broadly speaking, our results imply that auditing stability is not methodological curiosity – it is ethical question dressed as methods. A model whose top twenty recommendations change by sixty percent under a smaller embedding perturbation than what was used to train the model cannot be reliably acted upon even if its AUROC is encouraging on held-out test set. Reporting accuracy without stability is – in practice – way of laundering uncertainty into single confident-looking number. We argue any proposed DDI predictor should have accompanying stability certificate similar to that developed here because clinicians and regulators deserve more than one number. second concern is dataset provenance. Biosnap has been constructed from public sources which themselves possess their own biases. Target screening overrepresents compounds already marketed; disease association studies overrepresent well funded conditions/patient populations. Model trained on this graph will inherit these biases and may perform poorly on understudied populations/under screened drugs. This is not unique to our work — this is constraint on entire literature it sits within — but we feel obligated to flag rather than smooth over. Finally, releasing an audit methodology has dual use characterism of its own. Same techniques used to allow a clinician to inspect models stability could potentially allow an adversary identify perturbation directions wherein model is unreliable. We consider this low risk for the embedding level perturbations we study (adversary must have access to trained weights at which point graver attacks available), but worth naming.</p>
+      <p>This project is a research artifact, not deployable system. We explicitly acknowledge this because biomedical ML frequently blurs lines between research artifacts and deployable systems. The clinical risk associated with deploying a DDI predictor is asymmetric: false negative, missed interaction, can harm patient; false positive, spurious interaction, generates background noise that erodes trust of clinicians in tool. Both errors matter and trade off differently against accuracy and against stability. More broadly speaking, our results imply that auditing stability is not methodological curiosity, it is ethical question dressed as methods. A model whose top twenty recommendations change by sixty percent under a smaller embedding perturbation than what was used to train the model cannot be reliably acted upon even if its AUROC is encouraging on held-out test set. Reporting accuracy without stability is, in practice, way of laundering uncertainty into single confident-looking number. We argue any proposed DDI predictor should have accompanying stability certificate similar to that developed here because clinicians and regulators deserve more than one number. second concern is dataset provenance. Biosnap has been constructed from public sources which themselves possess their own biases. Target screening overrepresents compounds already marketed; disease association studies overrepresent well funded conditions/patient populations. Model trained on this graph will inherit these biases and may perform poorly on understudied populations/under screened drugs. This is not unique to our work, this is constraint on entire literature it sits within, but we feel obligated to flag rather than smooth over. Finally, releasing an audit methodology has dual use characterism of its own. Same techniques used to allow a clinician to inspect models stability could potentially allow an adversary identify perturbation directions wherein model is unreliable. We consider this low risk for the embedding level perturbations we study (adversary must have access to trained weights at which point graver attacks available), but worth naming.</p>
     </div>
   </div>
 </section>
@@ -1053,11 +1053,11 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
     <h2 class="stitle">Stability Auditing<br><span class="grad">Is an Ethics Question</span></h2>
   </div>
   <div class="prose reveal reveal-d1">
-    <p>This project is a research artifact, not a deployable system. We make this explicit because biomedical ML often blurs the line between the two. The clinical risk of a deployed DDI predictor is asymmetric: a false negative — a missed interaction — can harm a patient, while a false positive — a spurious interaction — generates the kind of background noise that erodes clinical trust in the tool. Both errors matter, and they trade off differently against accuracy and against stability.</p>
+    <p>This project is a research artifact, not a deployable system. We make this explicit because biomedical ML often blurs the line between the two. The clinical risk of a deployed DDI predictor is asymmetric: a false negative, a missed interaction, can harm a patient, while a false positive, a spurious interaction, generates the kind of background noise that erodes clinical trust in the tool. Both errors matter, and they trade off differently against accuracy and against stability.</p>
 
     <p>The broader implication of our results is that stability auditing is not a methods curiosity. It is an ethics question wearing methods clothing. A model whose top-twenty recommendations reshuffle by sixty percent under a small embedding perturbation is a model whose recommendations cannot be reliably acted on, even if its AUROC is reassuring on a held-out test set. Reporting accuracy without stability is, in practice, a way of laundering uncertainty into a single confident-looking number. We argue that any DDI predictor proposed for clinical use should be accompanied by a stability certificate of the kind we develop here, because clinicians and regulators deserve more than one number.</p>
 
-    <p>A second concern is dataset provenance. BioSNAP is built from public sources, but those sources have their own biases. Drug-target screening over-represents already-marketable compounds; disease-association studies over-represent well-funded conditions and patient populations. A model trained on this graph will inherit those biases and may underperform on under-studied populations and under-screened drugs. This is not unique to our work — it is a constraint on the entire literature it sits in — but it is a constraint we are obliged to flag rather than smooth over.</p>
+    <p>A second concern is dataset provenance. BioSNAP is built from public sources, but those sources have their own biases. Drug-target screening over-represents already-marketable compounds; disease-association studies over-represent well-funded conditions and patient populations. A model trained on this graph will inherit those biases and may underperform on under-studied populations and under-screened drugs. This is not unique to our work, it is a constraint on the entire literature it sits in, but it is a constraint we are obliged to flag rather than smooth over.</p>
 
     <p>Finally, releasing an auditing methodology has a dual-use character of its own. The same techniques that let a clinician inspect a model's stability could, in principle, let an adversary identify perturbation directions along which the model is unreliable. We consider this risk low for the embedding-level perturbations we study (the adversary would need access to trained weights, at which point graver attacks are available) but it is worth naming.</p>
   </div>
@@ -1068,36 +1068,36 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   <div class="reveal">
     <div class="slabel">§ 17 · Key Findings &amp; Conclusion</div>
     <h2 class="stitle">Six Findings That Change<br><span class="grad">How We Evaluate GNNs</span></h2>
-    <p class="sdesc">Direct implications for clinical deployment of GNN-based drug interaction prediction systems based upon concrete conclusions derived from our stability audit.</p>
+    <p class="sdesc">Direct implications for applying clinically deployed GNN-based drug interaction prediction systems on the basis of explicit conclusions obtained as a result of our analysis of stability.</p>
   </div>
   <div style="display:flex;flex-direction:column;gap:14px">
     <div class="fcrd reveal reveal-d1">
       <div class="fnum" style="background:rgba(59,130,246,.15);color:var(--bluel)">1</div>
-      <div><div class="ftitle" style="color:var(--bluel)">Accuracy ≠ Stability</div><div class="fdesc">RGCN achieves 0.912 AUROC vs GCN's 0.836 yet shows similar or slightly <em>worse</em> stability (SS 0.376 vs 0.422 at σ=0.30). Heterogeneous context that improves accuracy does not automatically improve robustness.</div></div>
+      <div><div class="ftitle" style="color:var(--bluel)">Accuracy does not equal stability</div><div class="fdesc">Although R-GCN was able to achieve an AUROC value of .912 compared to the .836 achieved by GCN, it had significantly lower stability (at σ = .30, SS = .376 vs. SS = .422).</div></div>
     </div>
     <div class="fcrd reveal reveal-d2">
       <div class="fnum" style="background:rgba(139,92,246,.15);color:var(--purplel)">2</div>
-      <div><div class="ftitle" style="color:var(--purplel)">The Accuracy–Stability Trade-Off Is Real</div><div class="fdesc">Ablation shows Disease-Drug edges improve AUROC by 1.6 points but decrease Stability Score by 4.3 points. The most informative auxiliary structure makes embedding spaces more sensitive to perturbation — a classic robustness-performance tension.</div></div>
+      <div><div class="ftitle" style="color:var(--purplel)">There is a real trade-off between accuracy and stability</div><div class="fdesc">In addition, when we ablate the disease-drug edge, the AUROC value increases by 1.6 points while the Stability Score decreases by 4.3 points. The most informative auxiliary structure is associated with a greater sensitivity to perturbation of embedding space; this represents a well-known trade-off between performance and robustness.</div></div>
     </div>
     <div class="fcrd reveal reveal-d3">
       <div class="fnum" style="background:rgba(16,185,129,.15);color:var(--green)">3</div>
-      <div><div class="ftitle" style="color:var(--green)">The Cold-Start Stability Paradox</div><div class="fdesc">When accuracy collapses in cold-start settings (GCN: 0.836→0.127, RGCN: 0.912→0.353), stability scores hold or improve. Less specialized embeddings are paradoxically more robust — specialization and stability are inversely related.</div></div>
+      <div><div class="ftitle" style="color:var(--green)">The cold start stability paradox</div><div class="fdesc">While there may be a collapse in accuracy in cold start scenarios (GCN: 0.836 → 0.127, R-GCN: 0.912 → 0.353), the Stability Score will either remain stable or increase. This means that less specialized embeddings are more robust, which suggests that specialization and stability have an inverse relationship.</div></div>
     </div>
     <div class="fcrd reveal reveal-d4">
       <div class="fnum" style="background:rgba(245,158,11,.15);color:var(--orange)">4</div>
-      <div><div class="ftitle" style="color:var(--orange)">Dropout vs. Gaussian: Different Fragility Modes</div><div class="fdesc">Both models maintain substantially higher stability scores under dimensional dropout than under Gaussian noise at matched severities (e.g., 0.591 vs 0.422 at the most extreme level). Structured perturbations reveal different fragility than additive noise.</div></div>
+      <div><div class="ftitle" style="color:var(--orange)">Dropout vs. Gaussian noise: two different types of fragility</div><div class="fdesc">At equivalent severity levels both models show substantial improvements in their stability scores due to dimensional dropout versus Gaussian noise: 0.591 vs. 0.422 at the most severe level. When structured perturbations are applied they demonstrate two different types of fragility than when additive noise is used.</div></div>
     </div>
     <div class="fcrd reveal">
       <div class="fnum" style="background:rgba(236,72,153,.15);color:var(--pink)">5</div>
-      <div><div class="ftitle" style="color:var(--pink)">Heuristics Can Outperform Learned GNNs</div><div class="fdesc">Common-neighbor (AUROC 0.886) beats the structure-only GCN (0.836). For dense graphs like DDI networks, simple topological signals are strong baselines that GNNs must overcome with auxiliary heterogeneous data — not just more architecture.</div></div>
+      <div><div class="ftitle" style="color:var(--pink)">Simple heuristics can out-perform learned GNNs</div><div class="fdesc">The common neighbor heuristic (AUROC = .886) performs better than the structure-only version of GCN (.836). For dense graphs such as those representing DDI networks, simple topological signals represent powerful baselines against which learned GNNs must compete using auxiliary heterogeneous information, not simply more architecture.</div></div>
     </div>
     <div class="fcrd reveal">
       <div class="fnum" style="background:rgba(6,182,212,.15);color:var(--cyan)">6</div>
-      <div><div class="ftitle" style="color:var(--cyan)">Stability Auditing Must Complement Accuracy</div><div class="fdesc">Deploying GNN-based DDI prediction in clinical systems requires Stability Score certificates across perturbation levels — not just test-set AUROC. Both metrics are necessary for confident deployment in safety-critical applications.</div></div>
+      <div><div class="ftitle" style="color:var(--cyan)">Stability auditing should complement accuracy auditing</div><div class="fdesc">Before deploying GNN-based DDI predictions into clinical systems, stability scores must be evaluated over all levels of perturbation in order to obtain certification, not just evaluation of AUROC values on a test set. In order to provide confident deployment into safety critical areas, both metrics are required.</div></div>
     </div>
   </div>
   <div class="hbox reveal" style="margin-top:28px">
-    <strong style="color:var(--bluel)">Conclusion:</strong> We built heterogeneous DDI knowledge graph using four snap data sets and trained both structure-only gcn (AUROC = 0.827) and multi-relational RGCN (AUROC = 0.917). Our stability analysis reveals both models exhibit comparable sensitivity to embedding perturbation — accuracy advantage provided by r-gcn does not provide representational robustness. Edge-type ablation further shows most accuracy-boosting graph structures decrease stability. These findings advocate for stability auditing as essential complement to standard accuracy evaluation in safety-critical GNN applications
+    <strong style="color:var(--bluel)">Conclusion:</strong> We built heterogeneous DDI knowledge graph using four snap data sets and trained both structure-only GCN (AUROC = 0.827) and multi-relational R-GCN (AUROC = 0.917). Our stability analysis reveals both models exhibit comparable sensitivity to embedding perturbation — accuracy advantage provided by R-GCN does not provide representational robustness. Edge-type ablation further shows most accuracy-boosting graph structures decrease stability. These findings advocate for stability auditing as essential complement to standard accuracy evaluation in safety-critical GNN applications
   </div>
 </section>
 
@@ -1155,7 +1155,7 @@ function countUp(el, to, dec, suffix, dur) {
 }
 const heroObs = new IntersectionObserver((entries) => {
   if (entries[0].isIntersecting) {
-    countUp(document.getElementById('cnt-auroc'), 0.912, 3, '', 2000);
+    countUp(document.getElementById('cnt-AUROC'), 0.912, 3, '', 2000);
     countUp(document.getElementById('cnt-edges'), 551665, 0, '+', 2000);
     countUp(document.getElementById('cnt-ss'), 0.842, 3, '', 2000);
     countUp(document.getElementById('cnt-trials'), 10, 0, '×', 1200);
@@ -1259,7 +1259,7 @@ const rgcn_dp_mean= [6.2141,32.2462,70.2617,115.7013,166.2404,263.9182];
 new Chart(document.getElementById('chart-accuracy'), {
   type: 'bar',
   data: {
-    labels: ['Heuristic','GCN','RGCN'],
+    labels: ['Heuristic','GCN','R-GCN'],
     datasets: [
       { label: 'AUROC', data: [0.886,0.836,0.912], backgroundColor: ['rgba(6,182,212,.75)','rgba(59,130,246,.75)','rgba(139,92,246,.75)'], borderRadius: 8, borderSkipped: false },
       { label: 'AUPRC', data: [0.552,0.457,0.705], backgroundColor: ['rgba(6,182,212,.3)','rgba(59,130,246,.3)','rgba(139,92,246,.3)'], borderRadius: 8, borderSkipped: false },
@@ -1275,7 +1275,7 @@ new Chart(document.getElementById('chart-hits'), {
     labels: ['Hits@10','Hits@20','Hits@50'],
     datasets: [
       mkBar('GCN',  [0.014,0.035,0.103], 'rgba(59,130,246,.75)'),
-      mkBar('RGCN', [0.086,0.149,0.314], 'rgba(139,92,246,.75)'),
+      mkBar('R-GCN', [0.086,0.149,0.314], 'rgba(139,92,246,.75)'),
     ]
   },
   options: baseOpts(0, 0.35, 'Hit Rate')
@@ -1291,7 +1291,7 @@ new Chart(document.getElementById('chart-roc'), {
       { label: 'Random', data: fpr, borderColor: 'rgba(255,255,255,0.15)', borderDash: [4,4], borderWidth: 1.5, pointRadius: 0, tension: 0, fill: false },
       mkLine('Heuristic (0.886)', [0.000,0.165,0.413,0.658,0.776,0.848,0.919,0.950,0.967,0.980,1.000], CYAN),
       mkLine('GCN (0.836)',       [0.000,0.137,0.310,0.485,0.616,0.717,0.834,0.895,0.939,0.980,1.000], BLUE, [4,2]),
-      mkLine('RGCN (0.912)',      [0.000,0.386,0.715,0.842,0.877,0.888,0.909,0.926,0.944,0.972,1.000], PURPLE),
+      mkLine('R-GCN (0.912)',      [0.000,0.386,0.715,0.842,0.877,0.888,0.909,0.926,0.944,0.972,1.000], PURPLE),
     ]
   },
   options: baseOpts(0, 1.05, 'True Positive Rate', 'False Positive Rate')
@@ -1306,12 +1306,12 @@ new Chart(document.getElementById('chart-ss'), {
       // GCN confidence band
       { label: '_gcn_up', data: gcn_ss.map((v,i)=>v+gcn_std[i]), fill: '+1', borderColor:'transparent', backgroundColor:'rgba(59,130,246,0.13)', pointRadius:0, tension:0.4 },
       { label: '_gcn_lo', data: gcn_ss.map((v,i)=>v-gcn_std[i]), fill: false, borderColor:'transparent', pointRadius:0, tension:0.4 },
-      // RGCN confidence band
+      // R-GCN confidence band
       { label: '_rgcn_up', data: rgcn_ss.map((v,i)=>v+rgcn_std[i]), fill: '+1', borderColor:'transparent', backgroundColor:'rgba(139,92,246,0.13)', pointRadius:0, tension:0.4 },
       { label: '_rgcn_lo', data: rgcn_ss.map((v,i)=>v-rgcn_std[i]), fill: false, borderColor:'transparent', pointRadius:0, tension:0.4 },
       // Mean lines
       mkLine('GCN', gcn_ss, BLUE),
-      mkLine('RGCN', rgcn_ss, PURPLE),
+      mkLine('R-GCN', rgcn_ss, PURPLE),
     ]
   },
   options: {
@@ -1336,7 +1336,7 @@ new Chart(document.getElementById('chart-rho'), {
     labels: NL,
     datasets: [
       mkLine('GCN Spearman ρ',  gcn_rho,  BLUE),
-      mkLine('RGCN Spearman ρ', rgcn_rho, PURPLE),
+      mkLine('R-GCN Spearman ρ', rgcn_rho, PURPLE),
     ]
   },
   options: baseOpts(0, 1.05, 'Spearman ρ', 'Gaussian Noise σ')
@@ -1349,7 +1349,7 @@ new Chart(document.getElementById('chart-deltap'), {
     labels: NL,
     datasets: [
       mkLine('GCN mean|Δp| (×10⁻⁵)', [0.438,2.272,5.018,8.570,13.117,25.535], BLUE),
-      mkLine('RGCN mean|Δp|',         [0.00621,0.03225,0.07026,0.11570,0.16624,0.26392], PURPLE),
+      mkLine('R-GCN mean|Δp|',         [0.00621,0.03225,0.07026,0.11570,0.16624,0.26392], PURPLE),
     ]
   },
   options: {
@@ -1360,7 +1360,7 @@ new Chart(document.getElementById('chart-deltap'), {
         mode: 'index', intersect: false,
         callbacks: {
           label: c => `  ${c.dataset.label}: ${c.parsed.y.toFixed(3)}`,
-          footer: () => 'GCN in units of 10⁻⁵ · RGCN in raw units'
+          footer: () => 'GCN in units of 10⁻⁵ · R-GCN in raw units'
         }
       }
     }
@@ -1376,9 +1376,9 @@ new Chart(document.getElementById('chart-jaccard'), {
       mkLine('GCN K=10',  gcn_j10,  BLUEL),
       mkLine('GCN K=20',  gcn_j20,  BLUE,   [5,3]),
       mkLine('GCN K=50',  gcn_j50,  '#1d4ed8', [2,2]),
-      mkLine('RGCN K=10', rgcn_j10, PURPLEL),
-      mkLine('RGCN K=20', rgcn_j20, PURPLE, [5,3]),
-      mkLine('RGCN K=50', rgcn_j50, '#6d28d9', [2,2]),
+      mkLine('R-GCN K=10', rgcn_j10, PURPLEL),
+      mkLine('R-GCN K=20', rgcn_j20, PURPLE, [5,3]),
+      mkLine('R-GCN K=50', rgcn_j50, '#6d28d9', [2,2]),
     ]
   },
   options: baseOpts(0, 1.0, 'Jaccard Overlap', 'Gaussian Noise σ')
@@ -1391,7 +1391,7 @@ new Chart(document.getElementById('chart-dss'), {
     labels: DL,
     datasets: [
       mkLine('GCN Stability Score',  [0.877,0.834,0.762,0.702,0.591], BLUE),
-      mkLine('RGCN Stability Score', [0.913,0.874,0.814,0.760,0.653], PURPLE),
+      mkLine('R-GCN Stability Score', [0.913,0.874,0.814,0.760,0.653], PURPLE),
     ]
   },
   options: baseOpts(0.5, 1.0, 'Stability Score', 'Dropout Rate')
@@ -1404,7 +1404,7 @@ new Chart(document.getElementById('chart-drho'), {
     labels: DL,
     datasets: [
       mkLine('GCN Spearman ρ',  [0.9675,0.9337,0.8600,0.7754,0.5659], CYAN),
-      mkLine('RGCN Spearman ρ', [0.9600,0.9270,0.8674,0.8084,0.6701], GREEN),
+      mkLine('R-GCN Spearman ρ', [0.9600,0.9270,0.8674,0.8084,0.6701], GREEN),
     ]
   },
   options: baseOpts(0.5, 1.05, 'Spearman ρ', 'Dropout Rate')
@@ -1419,16 +1419,16 @@ new Chart(document.getElementById('chart-compare'), {
     datasets: [
       mkBar('GCN — Gaussian',  [0.964,0.842,0.701,0.585,0.506], 'rgba(59,130,246,.6)'),
       mkBar('GCN — Dropout',   [0.877,0.834,0.762,0.702,0.591], 'rgba(59,130,246,.3)'),
-      mkBar('RGCN — Gaussian', [0.957,0.826,0.684,0.575,0.492], 'rgba(139,92,246,.6)'),
-      mkBar('RGCN — Dropout',  [0.913,0.874,0.814,0.760,0.653], 'rgba(139,92,246,.3)'),
+      mkBar('R-GCN — Gaussian', [0.957,0.826,0.684,0.575,0.492], 'rgba(139,92,246,.6)'),
+      mkBar('R-GCN — Dropout',  [0.913,0.874,0.814,0.760,0.653], 'rgba(139,92,246,.3)'),
     ]
   },
   options: baseOpts(0.4, 1.0, 'Stability Score', 'Perturbation Severity')
 });
 
 // ── 11. Ablation AUROC ───────────────────────────────────────────────────────
-const ABL = ['Full RGCN','No Drug-Gene','No Disease-Gene','No Disease-Drug'];
-new Chart(document.getElementById('chart-abl-auroc'), {
+const ABL = ['Full R-GCN','No Drug-Gene','No Disease-Gene','No Disease-Drug'];
+new Chart(document.getElementById('chart-abl-AUROC'), {
   type: 'bar',
   data: {
     labels: ABL,
@@ -1481,10 +1481,10 @@ new Chart(document.getElementById('chart-ablation'), {
 });
 
 // ── 14. Cold-start AUROC ─────────────────────────────────────────────────────
-new Chart(document.getElementById('chart-cold-auroc'), {
+new Chart(document.getElementById('chart-cold-AUROC'), {
   type: 'bar',
   data: {
-    labels: ['GCN\nStandard','GCN\nCold-Start','RGCN\nStandard','RGCN\nCold-Start'],
+    labels: ['GCN\nStandard','GCN\nCold-Start','R-GCN\nStandard','R-GCN\nCold-Start'],
     datasets: [{
       label: 'AUROC',
       data: [0.836,0.127,0.912,0.353],
@@ -1521,7 +1521,7 @@ new Chart(document.getElementById('chart-scatter'), {
         label: 'Standard conditions',
         data: [
           { x: 0.836, y: 0.701, name: 'GCN Std' },
-          { x: 0.912, y: 0.684, name: 'RGCN Std' },
+          { x: 0.912, y: 0.684, name: 'R-GCN Std' },
         ],
         backgroundColor: [BLUE, PURPLE],
         pointRadius: 10, pointHoverRadius: 13,
@@ -1531,7 +1531,7 @@ new Chart(document.getElementById('chart-scatter'), {
         label: 'Cold-start conditions',
         data: [
           { x: 0.127, y: 0.726, name: 'GCN Cold' },
-          { x: 0.353, y: 0.687, name: 'RGCN Cold' },
+          { x: 0.353, y: 0.687, name: 'R-GCN Cold' },
         ],
         backgroundColor: ['rgba(239,68,68,.8)','rgba(245,158,11,.8)'],
         pointRadius: 10, pointHoverRadius: 13,
@@ -1588,7 +1588,7 @@ function pct(arr) { const last = arr[arr.length-1]; return arr.map(e => +(100*e/
 const gcn_x  = pct(gcn_epochs);
 const rgcn_x = pct(rgcn_epochs);
 
-// Build a unified x label set from rgcn (denser)
+// Build a unified x label set from R-GCN (denser)
 const trainXLabels = rgcn_x.map(v => v + '%');
 function alignToRgcnX(srcX, srcY) {
   // Linear interp src series onto rgcn_x grid
@@ -1613,27 +1613,27 @@ new Chart(document.getElementById('chart-train-loss'), {
     datasets: [
       { ...mkLine('GCN train',  gcn_train_aligned,  BLUE),    pointRadius:0, borderWidth:2 },
       { ...mkLine('GCN val',    gcn_val_aligned,    BLUEL,    [4,3]), pointRadius:0, borderWidth:1.8 },
-      { ...mkLine('RGCN train', rgcn_trainloss,     PURPLE),  pointRadius:0, borderWidth:2 },
-      { ...mkLine('RGCN val',   rgcn_valloss,       PURPLEL,  [4,3]), pointRadius:0, borderWidth:1.8 },
+      { ...mkLine('R-GCN train', rgcn_trainloss,     PURPLE),  pointRadius:0, borderWidth:2 },
+      { ...mkLine('R-GCN val',   rgcn_valloss,       PURPLEL,  [4,3]), pointRadius:0, borderWidth:1.8 },
     ]
   },
   options: baseOpts(0.59, 0.71, 'Binary cross-entropy', '% of training run')
 });
 
-new Chart(document.getElementById('chart-train-auroc'), {
+new Chart(document.getElementById('chart-train-AUROC'), {
   type: 'line',
   data: {
     labels: trainXLabels,
     datasets: [
       { ...mkLine('GCN val AUROC',  gcn_auroc_aligned, BLUE),   pointRadius:0, borderWidth:2.4 },
-      { ...mkLine('RGCN val AUROC', rgcn_valauroc,     PURPLE), pointRadius:0, borderWidth:2.4 },
+      { ...mkLine('R-GCN val AUROC', rgcn_valauroc,     PURPLE), pointRadius:0, borderWidth:2.4 },
     ]
   },
   options: baseOpts(0.45, 0.95, 'Validation AUROC', '% of training run')
 });
 
-// ── 18. SS components (RGCN) — each component plotted alone ─────────────────
-// 1 - mean|Δp| dominated by RGCN (large dot products), so we cap at 1
+// ── 18. SS components (R-GCN) — each component plotted alone ────────────────
+// 1 - mean|Δp| dominated by R-GCN (large dot products), so we cap at 1
 const rgcn_dpmean_norm = [0.00621,0.03225,0.07026,0.11570,0.16624,0.26392];
 const rgcn_invDp = rgcn_dpmean_norm.map(v => +(1 - Math.min(v,1)).toFixed(4));
 new Chart(document.getElementById('chart-ss-components'), {
@@ -1661,7 +1661,7 @@ new Chart(document.getElementById('chart-flip-rate'), {
     labels: NL,
     datasets: [
       mkLine('GCN top-1 flip rate (lower bound)',  gcn_flip,  BLUE),
-      mkLine('RGCN top-1 flip rate (lower bound)', rgcn_flip, PURPLE),
+      mkLine('R-GCN top-1 flip rate (lower bound)', rgcn_flip, PURPLE),
     ]
   },
   options: baseOpts(0, 1.0, 'Fraction of drugs whose #1 partner changes', 'Gaussian Noise σ')
