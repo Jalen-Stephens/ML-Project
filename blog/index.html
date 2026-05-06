@@ -1014,10 +1014,10 @@ body{background:var(--bg0);color:var(--t0);font-family:-apple-system,BlinkMacSys
   <div class="sec-inner">
     <div class="reveal">
       <div class="slabel">§ 13 · Was AI really needed?</div>
-      <h2 class="stitle">A Three-Point<br><span class="grad">Honest Answer</span></h2>
+      <h2 class="stitle">Heuristics vs.<br><span class="grad">Graph Neural Networks</span></h2>
     </div>
     <div class="prose reveal reveal-d1">
-      <p>To judge how much modern ML papers are contributing beyond what we've done before, it makes sense to compare them to the past. In our experiment, the common neighbor heuristic achieves AUROC 0.887. The R-GCN achieved 0.917. A reader may find it difficult to resist asking if 0.03 difference in AUROC and the significant engineering overhead required to train and serve a graph neural network is worth the effort. In many cases, it isn't. However, "is AI worthwhile?" Breaks down into three separate questions, and each have different responses. So, yes, AI was necessary for doing the project we were able to do. Whether AI is necessary to deploy a DDI predictor is dependent upon which part of the graph the predictor is asked to operate upon, and this decision needs to be determined through empirical experimentation and not as a result of blindly using the largest possible model.</p>
+      <p>Though not for every use case, this one did require AI. The common neighbor heuristic achieves AUROC 0.887 with no training required, whereas the R-GCN reaches 0.917. Whether a 0.03 gain justifies the engineering overhead depends entirely on context: for dense, well-connected regions of the drug interaction graph, heuristics may suffice; however, for sparse or novel drug pairs, which is exactly where a deployed DDI predictor matters the most, the graph neural network holds a meaningful edge. AI was not needed to just "get a good number", it was needed to get a reliable one across the full graph.</p>
     </div>
   </div>
 </section>
