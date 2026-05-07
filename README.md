@@ -37,7 +37,18 @@ blog/           Final index.html and figure assets
 pip install -r requirements.txt
 ```
 
-Then run notebooks in order: `01_data_exploration` through `07_figures_and_tables`.
+### Reproducibility — single notebook (Colab-ready)
+
+`Node_Wars_Unified.ipynb` at the repo root is the canonical reproducibility
+artifact: every figure and number in `blog/index.html` is produced by this one
+notebook. Upload it to Google Colab (or open it locally) and click **Runtime →
+Run all**. With the cached checkpoints and result JSONs committed to this repo,
+it completes in ~2 minutes and renders every blog figure inline. To retrain
+all models from scratch, set `RUN_FROM_SCRATCH = True` in the first toggle
+cell.
+
+The `notebooks/01_*…07_*.ipynb` files are the original development notebooks
+and are kept for historical reference; the unified notebook supersedes them.
 
 ## Reproducibility
 
